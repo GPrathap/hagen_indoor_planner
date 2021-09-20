@@ -5,7 +5,7 @@
 <!-- warehouse simulation environment -->
   <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find hagen_indoor_sim)/models"/>
   <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find hagen_indoor_sim)/models"/>
-   <!-- <env name="GAZEBO_MODEL_PATH" value="$(find dyno_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/> -->
+   <!-- <env name="GAZEBO_MODEL_PATH" value="$(find hagen_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/> -->
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find hagen_indoor_sim)/worlds/warehouse_empty.world"/>

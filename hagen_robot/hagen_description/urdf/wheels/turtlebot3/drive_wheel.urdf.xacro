@@ -11,7 +11,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="${1.57*reflect} 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/wheels/right_tire.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/wheels/right_tire.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
         <material name="black"/>

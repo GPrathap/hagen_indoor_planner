@@ -14,7 +14,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/wheels/forklift_support_wheel.stl" scale="0.01 0.01 0.01"/>
+          <mesh filename="package://hagen_description/meshes/wheels/forklift_support_wheel.stl" scale="0.01 0.01 0.01"/>
         </geometry>
         <material name="orange"/>
       </visual>

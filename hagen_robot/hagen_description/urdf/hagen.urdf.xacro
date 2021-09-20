@@ -156,7 +156,7 @@
     <visual>
       <origin xyz="${forklift_x_offset} ${forklift_y_offset} ${forklift_z_offset}" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://dyno_description/meshes/bases/forklift_base.stl" scale="0.03 0.03 0.01"/>
+        <mesh filename="package://hagen_description/meshes/bases/forklift_base.stl" scale="0.03 0.03 0.01"/>
       </geometry>
       <material name="dark"/>
     </visual>
@@ -191,7 +191,7 @@
     <visual>
       <origin xyz="${forkjoint_x_offset} ${forklift_y_offset} ${forklift_z_offset}" rpy="0 0 ${PI}"/>
       <geometry>
-        <mesh filename="package://dyno_description/meshes/bases/forklift_fork.stl" scale="0.02 0.03 0.01"/>
+        <mesh filename="package://hagen_description/meshes/bases/forklift_fork.stl" scale="0.02 0.03 0.01"/>
       </geometry>
       <material name="black"/>
     </visual>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- Dyno Magni base -->
+<!-- hagen Magni base -->
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
@@ -26,7 +26,7 @@
         <origin xyz="0.05 0 0" rpy="${M_PI/2} 0 0"/>
         <geometry>
           <!-- <box size="${wheel_separation*1.3} ${wheel_separation-wheel_width} 0.25"/> -->
-          <mesh filename="package://dyno_description/meshes/bases/magni_sign_base.dae" scale="0.01 0.01 0.01"/>
+          <mesh filename="package://hagen_description/meshes/bases/magni_sign_base.dae" scale="0.01 0.01 0.01"/>
         </geometry>
       </visual>
 
@@ -62,7 +62,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/other/sign_pole.stl" scale="0.01 0.01 0.01"/>
+          <mesh filename="package://hagen_description/meshes/other/sign_pole.stl" scale="0.01 0.01 0.01"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -79,7 +79,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/other/monitor_43.dae" scale="0.01 0.01 0.01"/>
+          <mesh filename="package://hagen_description/meshes/other/monitor_43.dae" scale="0.01 0.01 0.01"/>
         </geometry>
         <material name="black"/>
       </visual>

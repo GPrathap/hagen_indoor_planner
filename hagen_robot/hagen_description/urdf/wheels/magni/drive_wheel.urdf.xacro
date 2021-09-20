@@ -11,7 +11,7 @@
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <!-- <cylinder radius="${radius}" length="${width}"/> -->
-          <mesh filename="package://dyno_description/meshes/wheels/magni_wheel.dae" scale="0.0118 0.0118 ${-0.0118 * reflect}"/>
+          <mesh filename="package://hagen_description/meshes/wheels/magni_wheel.dae" scale="0.0118 0.0118 ${-0.0118 * reflect}"/>
         </geometry>
       </visual>
 

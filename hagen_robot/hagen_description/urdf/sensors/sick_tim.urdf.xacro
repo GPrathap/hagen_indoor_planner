@@ -9,7 +9,7 @@
       length="0.06" width="0.06" height="0.086" mass="0.250" z_offset="0.06296"
       min_range="${min_range}" max_range="${max_range}"
       min_angle="${min_angle}" max_angle="${max_angle}"
-      mesh="package://dyno_description/meshes/sensors/sick_tim551.stl" />
+      mesh="package://hagen_description/meshes/sensors/sick_tim551.stl" />
   </xacro:macro>
 
   <xacro:macro name="sick_tim" params="name ros_topic length width height mass z_offset min_angle max_angle min_range max_range mesh">

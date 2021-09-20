@@ -3,7 +3,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Include OpenManipulator Chain Gazebo Parameter -->
-  <xacro:include filename="$(find dyno_description)/urdf/manipulators/open_manipulator.gazebo.xacro"/>
+  <xacro:include filename="$(find hagen_description)/urdf/manipulators/open_manipulator.gazebo.xacro"/>
 
   <xacro:macro name="open_manipulator" params="x_offset y_offset z_offset">
     <!-- Base fixed joint -->
@@ -18,7 +18,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link1.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
       </visual>
@@ -26,7 +26,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link1.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link1.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -65,7 +65,7 @@
       <visual>
         <origin xyz="0 0 0.018" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link2.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
       </visual>
@@ -73,7 +73,7 @@
       <collision>
         <origin xyz="0 0 0.018" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link2.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link2.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -113,7 +113,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link3.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link3.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
       </visual>
@@ -121,7 +121,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link3.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link3.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -161,7 +161,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link4.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link4.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
       </visual>
@@ -169,7 +169,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link4.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link4.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -209,7 +209,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link5.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link5.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
       </visual>
@@ -217,7 +217,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link5.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link5.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -235,7 +235,7 @@
       <visual>
         <origin xyz="0.028 0.0246 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link_grip_l.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link_grip_l.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
       </visual>
@@ -243,7 +243,7 @@
       <collision>
         <origin xyz="0.028 0.0246 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link_grip_l.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link_grip_l.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 
@@ -283,7 +283,7 @@
       <visual>
         <origin xyz="0.028 -0.0246 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link_grip_r.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link_grip_r.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="dark"/>
       </visual>
@@ -291,7 +291,7 @@
       <collision>
         <origin xyz="0.028 -0.0246 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://dyno_description/meshes/manipulators/open_manipulator/chain_link_grip_r.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://hagen_description/meshes/manipulators/open_manipulator/chain_link_grip_r.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
 

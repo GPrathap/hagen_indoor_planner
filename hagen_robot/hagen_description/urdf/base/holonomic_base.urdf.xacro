@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!-- Guidebot differential drive base -->
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="holonomic_base.gazebo.xacro"/>
+
+  <xacro:include filename="../wheels/holonomic/wheel_assembly.urdf.xacro"/>
+
+  <!-- Base footprint offset -->
+  <xacro:property name="base_footprint_height_offset" value="0.19"/> <!-- old value 0.19 -->
+
+  <!-- Base -->
+  <xacro:macro name="base">
+    <!-- Base -->
+
+    <link name="base_link">
+
+      <visual>
+        <origin xyz="0 0 0.04" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.2" radius="0.3"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0.04" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="0.2" radius="0.3"/>
+        </geometry>
+        <material name="orange"/>
+      </collision>
+
+      <!-- TODO: update according to real base properties -->
+      <inertial>
+        <mass value="10.0" />
+        <origin xyz="0 0 -0.2" />
+        <cylinder_inertia m="10.0" r="0.3" h="0.2" />
+      </inertial>
+
+    </link>
+
+    <!-- Base footprint -->
+    <link name="base_footprint">
+    </link>
+
+    <joint name="base_footprint_joint" type="fixed">
+      <origin xyz="0 0 ${base_footprint_height_offset}" rpy="0 0 0"/>
+      <parent link="base_footprint"/>
+      <child link="base_link"/>
+    </joint>
+
+    <!-- Macros -->
+    <xacro:wheel_assembly suffix="front_left" rot_axis="1">
+      <origin xyz="${caster_offset_x} ${caster_offset_y} 0.0" rpy="0 0 0"/>
+    </xacro:wheel_assembly>
+    <xacro:wheel_assembly suffix="front_right" rot_axis="1">
+      <origin xyz="${caster_offset_x} -${caster_offset_y} 0.0" rpy="0 0 0"/>
+    </xacro:wheel_assembly>
+    <xacro:wheel_assembly suffix="rear_left" rot_axis="1">
+      <origin xyz="-${caster_offset_x} ${caster_offset_y} 0.0" rpy="0 0 0"/>
+    </xacro:wheel_assembly>
+    <xacro:wheel_assembly suffix="rear_right" rot_axis="1">
+      <origin xyz="-${caster_offset_x} -${caster_offset_y} 0.0" rpy="0 0 0"/>
+    </xacro:wheel_assembly>
+
+    <!-- Gazebo extentions -->
+    <base_gazebo/>
+
+  </xacro:macro>
+
+</robot>

@@ -1,0 +1,7 @@
+# The front_laser configuration of hagen is sufficient for
+# basic gmapping and navigation. It is mostly the default
+# config, but with a SICK LMS100 series LIDAR on the front,
+# pointing forward.
+
+hagen_LASER_3D=1
+hagen_LASER=1

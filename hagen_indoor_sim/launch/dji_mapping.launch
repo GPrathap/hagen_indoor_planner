@@ -1,0 +1,27 @@
+<launch>
+  <arg name="max_vel" value="0.6"/>
+  <arg name="min_vel" value="-0.6"/>
+  <arg name="max_avoidance_distance" value="1.2"/>
+  <arg name="min_avoidance_distance" value="1.2"/>
+  <arg name="map_resolution" value="0.2"/>
+  <arg name="maximum_acceptable_error" value="0.05"/>
+  <arg name="max_vel_bspline" value="0.3"/>
+  <arg name="max_acce_bspline" value="0.2"/>
+
+  <node pkg="tf" name="world_map_tf" type="static_transform_publisher" args="0 0 0 0 0 0 world map 100" />
+ 
+  <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+                <param name="resolution" value="$(arg map_resolution)" />
+                <param name="frame_id" type="string" value="map" />
+                <param name="sensor_model/hit" value="0.6" />
+                <param name="sensor_model/miss" value="0.1" />
+                <param name="sensor_model/max_range" value="40.0" />
+                <param name="occupancy_min_z" value="-2.0" />
+                <param name="occupancy_max_z" value="40.0" />
+                <param name="pointcloud_min_z" value="-2.0" />
+                <param name="pointcloud_max_z" value="40.0" />
+                <remap from="cloud_in" to="/lidar_wamv/points" />
+                <!-- <remap from="cloud_in" to="/r200/depth/points" /> -->
+                 <!-- <remap from="cloud_in" to="/velodyne_points" /> -->
+  </node>
+</launch>

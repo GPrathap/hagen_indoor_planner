@@ -16,6 +16,22 @@
     <param name="global_costmap/robot_base_frame" value="base_link"/>
     <param name="local_costmap/global_frame" value="odom"/>
     <param name="local_costmap/robot_base_frame" value="base_link"/>
+    
+    <param name="visualize" value="true" />
+    <param name="visualize_deep" value="false" />
+    <param name="wheel_base" value="1.190" />
+    <param name="minimize_phi_and_dist" value="true" />
+    <param name="init_controls" value="true" />
+    <param name="use_th_constraints" value="true" />
+    <param name="use_xy_constraints" value="true" />
+    <param name="phi_min" value="-1.0" /> <!-- -0.9 -->
+    <param name="phi_max" value="1.0" />  <!-- 0.9 -->
+    <param name="reassign_constraints" value="true" />
+    <param name="reassign_iters" value="1" />
+    <param name="reassign_min_distance" value="0.1" />
+    <param name="use_incremental" value="true" />
+    <param name="incr_max_nb_points" value="30" />
+    <param name="incr_nb_points_discard" value="10" />
 
     <remap from="odom" to="odometry/filtered" />
 

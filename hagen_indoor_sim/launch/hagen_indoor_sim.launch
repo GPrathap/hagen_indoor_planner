@@ -60,6 +60,6 @@
       <param name="/trajectory_publish_rate" value="10.0" />
   </node>
 
-  <include file="$(find hagen_indoor_sim)/launch/planner.launch"></include>
+  <!-- <include file="$(find hagen_indoor_sim)/launch/planner.launch"></include> -->
 
 </launch>

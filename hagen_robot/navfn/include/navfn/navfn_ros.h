@@ -50,10 +50,10 @@
 
 #include <map_building_2d/edtoctomap.h>
 #include <map_building_2d/edt_map_environment.h>
-#include <rebound_shift_opt/rebound_shift_optimizer.h>
+// #include <rebound_shift_opt/rebound_shift_optimizer.h>
 #include <distance_map_core/distance_map_converter_base.h>
 #include <traj_common/planning_visualization.h>
-#include <path_finding/dyn_a_star.h>
+// #include <path_finding/dyn_a_star.h>
 #include <mpc_opt/bspline_utils.h>
 #include <distance_map_core/conversion.h>
 #include <distance_map_core/distance_map_converter_instantiater.h>
@@ -184,7 +184,7 @@ namespace navfn {
       hagen_planner::EDTOctoMap::Ptr sdf_map_;
       hagen_planner::EDTEnvironment::Ptr edt_env_;
       reeds_shepp::RSPathsROS::Ptr reeds_shepp_planner_;
-      hagen_planner::BsplineOptimizer::Ptr rebound_optimizer;
+      // hagen_planner::BsplineOptimizer::Ptr rebound_optimizer;
       hagen_planner::PlanningVisualization::Ptr visualization_;
       hagen_planner::BSplineUtils::Ptr bspline_utils_;
 

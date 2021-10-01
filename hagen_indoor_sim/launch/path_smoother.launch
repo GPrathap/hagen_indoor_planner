@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot_id" default="1"/>
+  <arg name="tf_prefix" value="robot$(arg robot_id)"/>
+  <arg name="use_ct" default="false"/>
+  <arg name="use_update_task" default="true"/>
+   <!-- <include file="$(find gazebo_worlds_oru)/launch/basement_map_server.launch" /> -->
+  
+  <node pkg="tf" type="static_transform_publisher" name="origin_broadcaster" 
+    args="0 0 0 0 0 0 /world map 100" />
+
+  <!-- <node name="map_server" pkg="map_server" type="map_server" args="$(find gazebo_worlds_oru)/maps/basement.yaml"/> -->
+
+  <group ns="$(arg tf_prefix)">
+    <param name="tf_prefix" value="$(arg tf_prefix)" />
+    <node pkg="navfn" type="acado_test" name="acado_test" output="screen">
+      <param name="model"
+             value="CiTiTruck_Expanded10+20_16_1_4.0_0.2.reduced" />
+      <param name="motion_primitives_directory"
+             value="$(find orunav_motion_planner)/Primitives/" />
+      <param name="lookup_tables_directory"
+             value="$(find orunav_motion_planner)/LookupTables/" />
+      <param name="min_incr_path_dist" value="0.2" />
+      <param name="visualize" value="true" />
+    </node>
+  </group>
+</launch>

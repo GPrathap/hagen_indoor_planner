@@ -38,6 +38,7 @@ void PathSmootherDynamic::init(ros::NodeHandle& node_){
   odom_sub_ = node_.subscribe<nav_msgs::Odometry>("/odometry/filtered", 50, &PathSmootherDynamic::odomCallback, this);
   global_path_sub_ = node_.subscribe<nav_msgs::Path>("/move_base/NavfnROS/plan", 10, &PathSmootherDynamic::goalTrajectoryCallback, this);
   smooth_path_pub_ = node_.advertise<nav_msgs::Path>("/move_base/hagen/smoothpath", 1);
+  path_planner.init(nh);
 }
 
 void PathSmootherDynamic::odomCallback(const nav_msgs::OdometryConstPtr& msg){
@@ -45,6 +46,10 @@ void PathSmootherDynamic::odomCallback(const nav_msgs::OdometryConstPtr& msg){
   current_pose.pose.position.x = odom.pose.pose.position.x;
   current_pose.pose.position.y = odom.pose.pose.position.y;
   current_pose.pose.position.z = 0.0;
+  current_pose.pose.orientation.x = 0.0;
+  current_pose.pose.orientation.y = 0.0;
+  current_pose.pose.orientation.z = 0.0;
+  current_pose.pose.orientation.w = 1.0;
 }
 
 void PathSmootherDynamic::goalTrajectoryCallback(const nav_msgs::PathConstPtr& msg){
@@ -55,8 +60,14 @@ void PathSmootherDynamic::goalTrajectoryCallback(const nav_msgs::PathConstPtr& m
       current_path.push_back(msg->poses[i]);
     }
     geometry_msgs::PoseStamped goal_ = msg->poses[msg->poses.size()-1];
-    smoothTraj(current_path, current_smoothed_path, current_pose, goal_);
-    publishSmoothPath(current_smoothed_path, 0.3, 0.5, 0.8, 1);
+    goal_.pose.orientation.x = 0.0;
+    goal_.pose.orientation.y = 0.0;
+    goal_.pose.orientation.z = 0.0;
+    goal_.pose.orientation.w = 1.0;
+    
+    path_planner.getPathCB(current_pose, goal_, 0.0, 0.0);
+    // smoothTraj(current_path, current_smoothed_path, current_pose, goal_);
+    // publishSmoothPath(current_smoothed_path, 0.3, 0.5, 0.8, 1);
 }
 
 void PathSmootherDynamic::publishSmoothPath(const std::vector<geometry_msgs::PoseStamped>& path, double r, double g, double b, double a){

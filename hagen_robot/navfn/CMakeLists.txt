@@ -23,12 +23,16 @@ find_package(catkin REQUIRED
         map_building_2d
         pcl_conversions
         pcl_ros
-        rebound_shift_opt
+        # rebound_shift_opt
         traj_common
-        path_finding
+        # path_finding
         base_local_planner
         mpc_opt
         orunav_generic
+        orunav_geometry
+        # orunav_rviz
+        orunav_motion_planner
+        orunav_msgs 
         )
 
 find_package(ACADO REQUIRED)
@@ -42,15 +46,17 @@ message("  - ACADO_LFLAGS : " ${ACADO_LFLAGS})
 
 find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(OpenCV REQUIRED)
+
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
     ${EIGEN3_INCLUDE_DIRS}
     ${ACADO_INCLUDE_DIRS}
     ${PCL_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
 )
 add_definitions(${EIGEN3_DEFINITIONS})
-
 
 # services
 add_service_files(
@@ -80,14 +86,46 @@ catkin_package(
         sensor_msgs
         visualization_msgs
         map_building_2d 
-        rebound_shift_opt
-        path_finding
+        # rebound_shift_opt
+        # path_finding
         base_local_planner
         traj_common
         mpc_opt
         orunav_generic
+        orunav_geometry
+        # orunav_rviz
+        orunav_motion_planner
+        orunav_msgs 
       DEPENDS ACADO Boost
 )
+
+# catkin_package(
+#     INCLUDE_DIRS
+#         include
+#     LIBRARIES
+#       acado_test
+#     CATKIN_DEPENDS
+#         geometry_msgs
+#         message_runtime
+#         nav_core
+#         nav_msgs
+#         pluginlib
+#         roscpp
+#         sensor_msgs
+#         visualization_msgs
+#         map_building_2d 
+#         # rebound_shift_opt
+#         # path_finding
+#         base_local_planner
+#         traj_common
+#         mpc_opt
+#         orunav_generic
+#         orunav_geometry
+#         # orunav_rviz
+#         orunav_motion_planner
+#         orunav_msgs 
+#       DEPENDS ACADO Boost
+# )
 
 check_include_file(sys/time.h HAVE_SYS_TIME_H)
 if (HAVE_SYS_TIME_H)
@@ -98,33 +136,34 @@ endif (HAVE_SYS_TIME_H)
 include_directories(/usr/local/include/ompl-1.5/)
 link_directories(/usr/local/lib/)
 
-add_library (navfn src/navfn.cpp src/navfn_ros.cpp src/reeds_shepp_ros.cpp src/validity_checker.cpp src/path_smoother_dynamic.cpp)
-target_link_libraries(navfn ompl ${catkin_LIBRARIES}  ${ACADO_LFLAGS} ${PCL_LIBRARIES})
+add_library (navfn src/navfn.cpp src/navfn_ros.cpp src/reeds_shepp_ros.cpp src/validity_checker.cpp src/path_smoother_dynamic.cpp  src/path_planner.cpp)
+target_link_libraries(navfn ompl ${catkin_LIBRARIES}  ${ACADO_LFLAGS} ${PCL_LIBRARIES} ${OpenCV_LIBS})
 add_dependencies(navfn ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 
-add_executable(navfn_node src/navfn_node.cpp src/reeds_shepp_ros.cpp src/validity_checker.cpp src/path_smoother_dynamic.cpp) 
-target_link_libraries(navfn_node navfn ompl ${ACADO_LFLAGS} ${PCL_LIBRARIES})
+# add_executable(navfn_node src/navfn_node.cpp src/reeds_shepp_ros.cpp src/validity_checker.cpp src/path_smoother_dynamic.cpp src/path_planner.cpp)  
+# target_link_libraries(navfn_node navfn ompl ${ACADO_LFLAGS} ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
-add_executable(acado_test src/acado_test.cc  src/path_smoother_dynamic.cpp)
+add_library(acado_test src/acado_test.cc  src/path_smoother_dynamic.cpp src/path_planner.cpp)
 target_link_libraries(acado_test
   ${catkin_LIBRARIES} 
   ${Boost_LIBRARIES}
   ${ACADO_LFLAGS}
   ${PCL_LIBRARIES}
+  ${OpenCV_LIBS}
 )
+add_dependencies(acado_test ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+# install(TARGETS navfn_node
+#        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#        )
 
-install(TARGETS navfn_node
-       RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-       )
-
-install(TARGETS navfn
+install(TARGETS navfn acado_test
        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
        )
 
-install(DIRECTORY include/navfn/
+install(DIRECTORY include/navfn/ 
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 

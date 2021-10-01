@@ -42,13 +42,16 @@
     <depend>distance_map_msgs</depend>
     <depend>distance_map_node</depend>
     <depend>map_building_2d</depend>
-    <depend>rebound_shift_opt</depend>
-    <depend>path_finding</depend>
+    <!-- <depend>rebound_shift_opt</depend> -->
+    <!-- <depend>path_finding</depend> -->
     <depend>traj_common</depend>
     <depend>mpc_opt</depend>
     <depend>base_local_planner</depend>
     <depend>orunav_generic</depend>
-
+    <depend>orunav_geometry</depend>
+    <depend>orunav_motion_planner</depend>
+    <depend>orunav_msgs</depend> 
+    <depend>orunav_rviz</depend> 
     <exec_depend>message_runtime</exec_depend>
 
     <test_depend>rosunit</test_depend>

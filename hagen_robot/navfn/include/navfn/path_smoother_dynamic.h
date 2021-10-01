@@ -22,6 +22,7 @@
 #include <nav_core/base_global_planner.h>
 #include <nav_msgs/GetPlan.h>
 #include <navfn/potarr_point.h>
+#include <navfn/path_planner.h>
 
 #include <navfn/trajectory_processor_naive.h>
 #include <navfn/trajectory_processor.h>
@@ -259,6 +260,7 @@ class PathSmootherDynamic
 
   PathSmootherDynamic();
   PathSmootherDynamic::Params params;
+  PathPlannerService path_planner;
   // MultiDetector detector1;55
   bool visualize;
   bool do_nothing;

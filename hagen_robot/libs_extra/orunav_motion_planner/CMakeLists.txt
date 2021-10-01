@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   orunav_conversions
   orunav_geometry
 )
-find_package(OpenCV REQUIRED)
+
 
 find_package(Eigen3)
 if(NOT EIGEN3_FOUND)
@@ -26,6 +26,8 @@ else()
   set(EIGEN3_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
 endif()
 
+# FIND_PACKAGE( OpenCV REQUIRED )                              
+
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED COMPONENTS system program_options thread)
 if (${Boost_VERSION} LESS 106500)
@@ -33,7 +35,7 @@ if (${Boost_VERSION} LESS 106500)
 endif()
 
 #SET(CMAKE_CXX_FLAGS "-std=c++11 -O3")
-  add_definitions(-std=c++11)
+add_definitions(-std=c++11)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -52,6 +54,34 @@ include_directories(
   ${Boost_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
 )
+
+
+add_library(orunav_motion_planner
+    src/get_path_service.cpp
+    src/ARAStarPathPlanner.cpp
+    src/AStar.cpp
+    src/AStarPathPlanner.cpp
+    src/CarConfiguration.cpp
+    src/CarModel.cpp
+    src/CollisionDetector.cpp
+    src/Configuration.cpp
+    src/DiscWorldVisualizer.cpp
+    src/LHDConfiguration.cpp
+    src/LHDModel.cpp
+    src/MapGenerators.cpp
+    src/MotionPrimitiveData.cpp
+    src/MotionPrimitiveSelector.cpp
+    src/PathFinder.cpp
+    src/PathNode.cpp
+    src/UnicycleConfiguration.cpp
+    src/UnicycleModel.cpp
+    src/Utils.cpp
+    src/VehicleMission.cpp
+    src/VehicleModel.cpp
+    src/World.cpp
+    src/WorldOccupancyMap.cpp
+    src/WorldParameters.cpp
+  )
 
 ## Declare a cpp executable
 add_executable(get_path_service src/get_path_service.cpp
@@ -111,3 +141,13 @@ install(DIRECTORY
   Primitives
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
+
+install(TARGETS ${PROJECT_NAME}
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+       )
+
+install(DIRECTORY include/${PROJECT_NAME}/
+	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+       )

@@ -14,7 +14,7 @@
 
   <group ns="$(arg tf_prefix)">
     <param name="tf_prefix" value="$(arg tf_prefix)" />
-    <node pkg="navfn" type="acado_test" name="acado_test" output="screen">
+    <node pkg="navfn" type="path_smoother_hagen" name="path_smoother_hagen" output="screen">
       <param name="model"
              value="CiTiTruck_Expanded10+20_16_1_4.0_0.2.reduced" />
       <param name="motion_primitives_directory"

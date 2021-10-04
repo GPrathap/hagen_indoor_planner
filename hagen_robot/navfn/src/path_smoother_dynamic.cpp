@@ -36,8 +36,9 @@ void PathSmootherDynamic::init(ros::NodeHandle& node_){
   nh.param<int>("incr_max_nb_points", params.incr_max_nb_points, 20);
   nh.param<int>("incr_nb_points_discard", params.incr_nb_points_discard, 5);
   odom_sub_ = node_.subscribe<nav_msgs::Odometry>("/odometry/filtered", 50, &PathSmootherDynamic::odomCallback, this);
-  global_path_sub_ = node_.subscribe<nav_msgs::Path>("/move_base/NavfnROS/plan", 10, &PathSmootherDynamic::goalTrajectoryCallback, this);
+  global_path_sub_ = node_.subscribe<nav_msgs::Path>("/move_base/NavfnROS/plan", 1, &PathSmootherDynamic::goalTrajectoryCallback, this);
   smooth_path_pub_ = node_.advertise<nav_msgs::Path>("/move_base/hagen/smoothpath", 1);
+  path_pub = node_.advertise<nav_msgs::Path>("/move_base/hagen/init_path", 1);
   path_planner.init(nh);
 }
 
@@ -46,10 +47,10 @@ void PathSmootherDynamic::odomCallback(const nav_msgs::OdometryConstPtr& msg){
   current_pose.pose.position.x = odom.pose.pose.position.x;
   current_pose.pose.position.y = odom.pose.pose.position.y;
   current_pose.pose.position.z = 0.0;
-  current_pose.pose.orientation.x = 0.0;
-  current_pose.pose.orientation.y = 0.0;
-  current_pose.pose.orientation.z = 0.0;
-  current_pose.pose.orientation.w = 1.0;
+  current_pose.pose.orientation.x = odom.pose.pose.orientation.x;
+  current_pose.pose.orientation.y = odom.pose.pose.orientation.y;
+  current_pose.pose.orientation.z = odom.pose.pose.orientation.z;
+  current_pose.pose.orientation.w = odom.pose.pose.orientation.w;
 }
 
 void PathSmootherDynamic::goalTrajectoryCallback(const nav_msgs::PathConstPtr& msg){
@@ -60,14 +61,18 @@ void PathSmootherDynamic::goalTrajectoryCallback(const nav_msgs::PathConstPtr& m
       current_path.push_back(msg->poses[i]);
     }
     geometry_msgs::PoseStamped goal_ = msg->poses[msg->poses.size()-1];
+    // TODO 
     goal_.pose.orientation.x = 0.0;
     goal_.pose.orientation.y = 0.0;
     goal_.pose.orientation.z = 0.0;
     goal_.pose.orientation.w = 1.0;
-    
-    path_planner.getPathCB(current_pose, goal_, 0.0, 0.0);
-    // smoothTraj(current_path, current_smoothed_path, current_pose, goal_);
-    // publishSmoothPath(current_smoothed_path, 0.3, 0.5, 0.8, 1);
+    std::vector<orunav_msgs::PoseSteering> path_out;
+    path_planner.getPathCB(current_pose, goal_, 0.0, 0.0, path_out);
+    publishInitPath(path_out, 1.0, 0.8, 0.3, 1);
+    if(path_out.size()>3){
+      smoothTraj(path_out, current_smoothed_path, current_pose, goal_);
+      publishSmoothPath(current_smoothed_path, 0.3, 0.5, 0.8, 1);
+    }
 }
 
 void PathSmootherDynamic::publishSmoothPath(const std::vector<geometry_msgs::PoseStamped>& path, double r, double g, double b, double a){
@@ -79,7 +84,23 @@ void PathSmootherDynamic::publishSmoothPath(const std::vector<geometry_msgs::Pos
       gui_path.poses[i] = path[i];
     }
     smooth_path_pub_.publish(gui_path);
-  }
+}
+
+void PathSmootherDynamic::publishInitPath(const std::vector<orunav_msgs::PoseSteering>& path, double r, double g, double b, double a){
+    nav_msgs::Path gui_path;
+    gui_path.poses.resize(path.size());
+    gui_path.header.frame_id = global_frame_;
+    gui_path.header.stamp = ros::Time::now();
+    for(unsigned int i=0; i < path.size(); i++){
+      geometry_msgs::PoseStamped next_pose;
+      next_pose.pose.position.x = path[i].pose.position.x;
+      next_pose.pose.position.y = path[i].pose.position.y;
+      next_pose.pose.position.z = 0.0;
+      gui_path.poses[i] = next_pose;
+    }
+    path_pub.publish(gui_path);
+}
+
 
 orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Trajectory &traj, double dt, double start_time
                                                                                 , double stop_time, bool use_pose_constraints){
@@ -267,15 +288,15 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
       return yaw;
   }
 
-  void PathSmootherDynamic::smoothTraj(const std::vector<geometry_msgs::PoseStamped>& path_original
+  void PathSmootherDynamic::smoothTraj(const std::vector<orunav_msgs::PoseSteering>& path_original
                                 , std::vector<geometry_msgs::PoseStamped>& smoothed_path
                                 , const geometry_msgs::PoseStamped& start_p, const geometry_msgs::PoseStamped& goal_p){
         
-            // orunav_generic::State2d start(start_p.pose.position.x, start_p.pose.position.y, get_yaw(start_p), 0.0);
-            // orunav_generic::State2d goal(goal_p.pose.position.x, goal_p.pose.position.y, get_yaw(goal_p), 0.0);
+            orunav_generic::State2d start(start_p.pose.position.x, start_p.pose.position.y, get_yaw(start_p), 0.0);
+            orunav_generic::State2d goal(goal_p.pose.position.x, goal_p.pose.position.y, get_yaw(goal_p), 0.0);
 
-             orunav_generic::State2d start(start_p.pose.position.x, start_p.pose.position.y, 0.0, 0.0);
-            orunav_generic::State2d goal(goal_p.pose.position.x, goal_p.pose.position.y, 0.0, 0.0);
+            // orunav_generic::State2d start(start_p.pose.position.x, start_p.pose.position.y, 0.0, 0.0);
+            // orunav_generic::State2d goal(goal_p.pose.position.x, goal_p.pose.position.y, 0.0, 0.0);
 
             ACADO_clearStaticCounters();  
             bool use_pose_constraints;
@@ -287,11 +308,11 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
               orunav_generic::Pose2d p;
               p[0] = path_original[i].pose.position.x;
               p[1] = path_original[i].pose.position.y;
-              p[2] = 0.0;
-              path_orig.addPathPoint(p, 0.0);
+              p[2] = tf::getYaw(path_original[i].pose.orientation);
+              path_orig.addPathPoint(p, path_original[i].steering);
             }
             
-            std::cout << "PATH SMOOTHER : path_orig.size() : " << path_original.size() << std::endl;
+            std::cout << "PATH SMOOTHER : path_orig ooooooooo.size() : " << path_original.size() << std::endl;
             if (use_pose_constraints) {
               std::cout << "----- will use spatial constraints -----" << std::endl;
             }
@@ -350,6 +371,8 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
             if (params.update_v_w_bounds) {
               PathSmootherDynamic::Params params_orig = params;
               if (params.init_controls || params.get_speed) {
+
+                std::cout<< "=======================================get fixed values========================================================================="<< std::endl;
                 orunav_generic::getMinMaxVelocities(traj, params.v_min, params.v_max, params.w_min, params.w_max);
               }
               else {

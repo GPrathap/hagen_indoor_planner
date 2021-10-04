@@ -144,20 +144,20 @@ add_dependencies(navfn ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_T
 # add_executable(navfn_node src/navfn_node.cpp src/reeds_shepp_ros.cpp src/validity_checker.cpp src/path_smoother_dynamic.cpp src/path_planner.cpp)  
 # target_link_libraries(navfn_node navfn ompl ${ACADO_LFLAGS} ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
-add_library(acado_test src/acado_test.cc  src/path_smoother_dynamic.cpp src/path_planner.cpp)
-target_link_libraries(acado_test
+add_executable(path_smoother_hagen src/acado_test.cc  src/path_smoother_dynamic.cpp src/path_planner.cpp)
+target_link_libraries(path_smoother_hagen
   ${catkin_LIBRARIES} 
   ${Boost_LIBRARIES}
   ${ACADO_LFLAGS}
   ${PCL_LIBRARIES}
   ${OpenCV_LIBS}
 )
-add_dependencies(acado_test ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(path_smoother_hagen ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 # install(TARGETS navfn_node
 #        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 #        )
 
-install(TARGETS navfn acado_test
+install(TARGETS navfn path_smoother_hagen
        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

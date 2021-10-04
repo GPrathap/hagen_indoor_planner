@@ -159,7 +159,7 @@ class PathSmootherDynamic
         phi_max = 1.1;
         get_speed = true; //true;
         init_states = true;
-        init_controls = false;
+        init_controls = true;
         max_nb_opt_points = 12;
         even_point_dist = true;	
         min_dist = -1.;
@@ -267,7 +267,7 @@ class PathSmootherDynamic
   bool reassign_constraints;
   int reassign_iters;
   double reassign_min_distance_;
-  ros::Publisher marker_pub, smooth_path_pub_;
+  ros::Publisher marker_pub, smooth_path_pub_, path_pub;
   ros::Subscriber odom_sub_, global_path_sub_;
   geometry_msgs::PoseStamped current_pose;
   std::string global_frame_;
@@ -278,13 +278,13 @@ class PathSmootherDynamic
   // void computeThBounds(const double &lb_orig, const double &ub_orig, const double &th, double &lb_new, double &ub_new);
   orunav_generic::Trajectory smooth_(const orunav_generic::Trajectory &traj, double dt, double start_time
                                                                                 , double stop_time, bool use_pose_constraints);
-  void smoothTraj(const std::vector<geometry_msgs::PoseStamped>& path_original
+  void smoothTraj(const std::vector<orunav_msgs::PoseSteering>& path_original
                                 , std::vector<geometry_msgs::PoseStamped>& smoothed_path
                                 , const geometry_msgs::PoseStamped& start, const geometry_msgs::PoseStamped& goal);
   void goalTrajectoryCallback(const nav_msgs::PathConstPtr& msg);
   void odomCallback(const nav_msgs::OdometryConstPtr& msg);
   void publishSmoothPath(const std::vector<geometry_msgs::PoseStamped>& path, double r, double g, double b, double a);
-  
+  void publishInitPath(const std::vector<orunav_msgs::PoseSteering>& path, double r, double g, double b, double a);
 };
 
 #endif 

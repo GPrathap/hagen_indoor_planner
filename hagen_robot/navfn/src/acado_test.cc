@@ -19,7 +19,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "acado_test");
+    ros::init(argc, argv, "path_smoother_hagen");
     PathSmootherDynamic path_smoother;
     ros::AsyncSpinner spinner(1);
     ros::NodeHandle nh("~");

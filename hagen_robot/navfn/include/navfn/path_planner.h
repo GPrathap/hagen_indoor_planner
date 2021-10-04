@@ -9,11 +9,8 @@
 #include <orunav_msgs/GetPath.h>
 #include <orunav_motion_planner/PathFinder.h>
 #include <orunav_motion_planner/VehicleMission.h>
-// #include <orunav_motion_planner/nav_msgs_occupancy_grid_to_planner_map.h>
-
 #include <iostream>
 #include <string>
-
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
@@ -22,7 +19,6 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Point.h>
 #include <visualization_msgs/Marker.h>
-// #include <orunav_rviz/orunav_rviz.h>
 
 class PathPlannerService
 {
@@ -34,7 +30,7 @@ class PathPlannerService
     
     bool visualize_;
     
-    ros::Publisher marker_pub_;
+    ros::Publisher marker_pub_, path_pub;
     ros::Subscriber map_sub;
     double min_incr_path_dist_;
     bool save_paths_;
@@ -48,15 +44,15 @@ class PathPlannerService
 
  public:
 
-  PathPlannerService()= default;
-  void init(ros::NodeHandle param_nh);
-  void process_map(const nav_msgs::OccupancyGrid::ConstPtr &msg);
-  ~PathPlannerService();
-  bool getPathCB(const geometry_msgs::PoseStamped start, const geometry_msgs::PoseStamped goal, double start_steering, double goal_steering);
-  void convertNavMsgsOccupancyGridToWorldOccupancyMapRef(const nav_msgs::OccupancyGrid& msg, WorldOccupancyMap &map);
-  orunav_generic::Pose2d getNavMsgsOccupancyGridOffsetRef(const nav_msgs::OccupancyGrid &msg);
-  orunav_generic::Pose2d createPose2dFromMsg(const geometry_msgs::Pose& pose);
-  orunav_msgs::Path createPathMsgFromPathInterface(const orunav_generic::PathInterface &path);
+    PathPlannerService()= default;
+    void init(ros::NodeHandle param_nh);
+    void process_map(const nav_msgs::OccupancyGrid::ConstPtr &msg);
+    ~PathPlannerService();
+    bool getPathCB(const geometry_msgs::PoseStamped start, const geometry_msgs::PoseStamped goal, double start_steering, double goal_steering, std::vector<orunav_msgs::PoseSteering>& path_out);
+    void convertNavMsgsOccupancyGridToWorldOccupancyMapRef(const nav_msgs::OccupancyGrid& msg, WorldOccupancyMap &map);
+    orunav_generic::Pose2d getNavMsgsOccupancyGridOffsetRef(const nav_msgs::OccupancyGrid &msg);
+    orunav_generic::Pose2d createPose2dFromMsg(const geometry_msgs::Pose& pose);
+    void createPathMsgFromPathInterface(const orunav_generic::PathInterface& path_in, std::vector<orunav_msgs::PoseSteering>& path_out);
 };
 
 #endif 

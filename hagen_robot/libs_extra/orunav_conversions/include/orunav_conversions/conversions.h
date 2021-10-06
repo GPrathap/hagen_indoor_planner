@@ -139,20 +139,20 @@ namespace orunav_conversions
 
 
   orunav_generic::Path createPathFromPathMsg(const orunav_msgs::Path &path)
-    {
+  {
       orunav_generic::Path p;
       for (unsigned int i = 0; i < path.path.size(); i++)
-	{
-	  p.addPathPoint(createPose2dFromMsg(path.path[i].pose), path.path[i].steering);
-	}
+      {
+        p.addPathPoint(createPose2dFromMsg(path.path[i].pose), path.path[i].steering);
+      }
       return p;
-    }
+  }
 
   orunav_generic::Path createPathFromPathMsgUsingTargetsAsFirstLast(const orunav_msgs::Path &path) {
       orunav_generic::Path p;
       p.addPathPoint(createPose2dFromMsg(path.target_start.pose), path.target_start.steering);
       for (unsigned int i = 1; i < path.path.size()-1; i++) {
-	p.addPathPoint(createPose2dFromMsg(path.path[i].pose), path.path[i].steering);
+	      p.addPathPoint(createPose2dFromMsg(path.path[i].pose), path.path[i].steering);
       }
       p.addPathPoint(createPose2dFromMsg(path.target_goal.pose), path.target_goal.steering);
       return p;

@@ -59,7 +59,6 @@
 #include <distance_map_core/distance_map_converter_instantiater.h>
 #include <distance_map_msgs/DistanceMap.h> 
 #include <navfn/reeds_shepp_ros.h>
-#include <navfn/path_smoother_dynamic.h>
 
 #include <thread>
 

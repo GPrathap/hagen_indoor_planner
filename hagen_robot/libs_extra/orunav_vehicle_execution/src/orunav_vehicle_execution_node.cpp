@@ -97,8 +97,8 @@ KMOVehicleExecutionNode::KMOVehicleExecutionNode(ros::NodeHandle &paramHandle){
     smooth_path_pub_ = nh_.advertise<nav_msgs::Path>("/move_base/hagen/smoothpath", 1);
     path_pub = nh_.advertise<nav_msgs::Path>("/move_base/hagen/init_path", 1);
     
-    path_planner.init(nh_);
     path_smoother.init(nh_);
+    path_planner.init(nh_);
 
     if (use_arm)
     {

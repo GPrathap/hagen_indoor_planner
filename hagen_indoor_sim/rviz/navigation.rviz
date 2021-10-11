@@ -7,9 +7,6 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1/Frames1
-        - /Path3
-        - /Path5/Status1
-        - /Path6
       Splitter Ratio: 0.546558678150177
     Tree Height: 1088
   - Class: rviz/Selection
@@ -480,9 +477,63 @@ Visualization Manager:
       Topic: /move_base/hagen/smoothpath
       Unreliable: false
       Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot1/visualization_marker
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot1/visualization_marker2
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot1/visualization_marker3
+      Name: Marker
+      Namespaces:
+        current_path_idx: true
+        current_path_subsampled: true
+        current_path_subsampled_sw: true
+        docking_path_idx: true
+        path_points1: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot1/visualization_marker4
+      Name: Marker
+      Namespaces:
+        position: true
+        robot_id_str: true
+        state_str: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot1/visualization_marker5
+      Name: Marker
+      Namespaces:
+        critical_point: true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /robot1/visualization_marker6
+      Name: Marker
+      Namespaces:
+        earliest_connect_path_idx: true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
+    Background Color: 255; 255; 255
     Default Light: true
     Fixed Frame: map
     Frame Rate: 30
@@ -500,7 +551,7 @@ Visualization Manager:
       X std deviation: 0.5
       Y std deviation: 0.5
     - Class: rviz/SetGoal
-      Topic: /move_base_simple/goal
+      Topic: /robot1/goal
     - Class: rviz/PublishPoint
       Single click: true
       Topic: /clicked_point
@@ -508,25 +559,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 19.901988983154297
+      Distance: 25.610179901123047
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.7264649868011475
-        Y: 0.5040885806083679
-        Z: 0.8553717136383057
+        X: 1.297190546989441
+        Y: 1.749413013458252
+        Z: 1.0381313562393188
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 1.3597970008850098
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.270421028137207
+      Yaw: 4.9654364585876465
     Saved: ~
 Window Geometry:
   Displays:
@@ -544,5 +595,5 @@ Window Geometry:
   Views:
     collapsed: true
   Width: 1687
-  X: 67
+  X: 1753
   Y: 27

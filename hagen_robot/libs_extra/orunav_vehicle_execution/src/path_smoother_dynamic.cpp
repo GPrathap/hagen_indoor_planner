@@ -230,7 +230,7 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
       return yaw;
   }
 
-  void PathSmootherDynamic::smoothTraj(const std::vector<orunav_msgs::PoseSteering>& path_original
+  void PathSmootherDynamic::smoothTraj(const orunav_generic::Path& path_original
                                 , orunav_generic::Path& smoothed_path
                                 , const geometry_msgs::PoseStamped& start_p, const geometry_msgs::PoseStamped& goal_p){
         
@@ -244,17 +244,17 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
             bool use_pose_constraints;
             use_pose_constraints = false;
             // orunav_generic::Pose2dContainerInterface path_orig;
-            orunav_generic::Path path_orig;
-            for (int i = 0; i < path_original.size(); i++)
-            {
-              orunav_generic::Pose2d p;
-              p[0] = path_original[i].pose.position.x;
-              p[1] = path_original[i].pose.position.y;
-              p[2] = tf::getYaw(path_original[i].pose.orientation);
-              path_orig.addPathPoint(p, path_original[i].steering);
-            }
+            orunav_generic::Path path_orig = path_original;
+            // for (int i = 0; i < path_original.size(); i++)
+            // {
+            //   orunav_generic::Pose2d p;
+            //   p[0] = path_original[i].pose.position.x;
+            //   p[1] = path_original[i].pose.position.y;
+            //   p[2] = tf::getYaw(path_original[i].pose.orientation);
+            //   path_orig.addPathPoint(p, path_original[i].steering);
+            // }
             
-            std::cout << "PATH SMOOTHER : path_orig ooooooooo.size() : " << path_original.size() << std::endl;
+            std::cout << "PATH SMOOTHER : path_orig ooooooooo.size() : " << path_original.sizePath() << std::endl;
             if (use_pose_constraints) {
               std::cout << "----- will use spatial constraints -----" << std::endl;
             }
@@ -376,6 +376,7 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
             
             smoothed_trajectory = si.getTrajectory();
             orunav_generic::Path final_smoothed_path(smoothed_trajectory);
+            
             // std::vector<geometry_msgs::PoseStamped> smoothed_;
             // for(int i=0; i< final_smoothed_path.sizePath(); i++){
             //   geometry_msgs::PoseStamped stap;

@@ -72,7 +72,7 @@
 #include <tf/transform_listener.h>
 #include <laser_geometry/laser_geometry.h>
 #include <std_msgs/Float64MultiArray.h>
-
+#include <orunav_rviz/orunav_rviz.h>
 #include <move_base_msgs/MoveBaseActionGoal.h>
 
 class KMOVehicleExecutionNode
@@ -225,7 +225,7 @@ class KMOVehicleExecutionNode
         
         void drawPointCloud(const sensor_msgs::PointCloud &points, const std::string &name, int id, int color, double scale, ros::Publisher &pub);
         void updateTrajParamsWithVelocityConstraints(TrajectoryProcessor::Params &traj_params, const VehicleState &vehicle_state);
-        void goalTrajectoryCallback(const move_base_msgs::MoveBaseActionGoalConstPtr& msg);
+        void goalTrajectoryCallback(const geometry_msgs::PoseStampedConstPtr& msg1);
         void odomCallback(const nav_msgs::OdometryConstPtr& msg);
         void publishInitPath(const std::vector<orunav_msgs::PoseSteering>& path, double r, double g, double b, double a);
         void publishSmoothPath(const orunav_generic::Path& path, double r, double g, double b, double a);
@@ -233,6 +233,15 @@ class KMOVehicleExecutionNode
         void calculateCommands(orunav_generic::Path& path);
         void sendTrajectoryChunks(const std::pair<unsigned int, orunav_generic::TrajectoryChunks> &chunks_data);
         void sendActivateStartTimeCommand(const ros::Time &startTime);
+        void process_report(const orunav_msgs::ControllerReportConstPtr &msg);
+        void process_velocity_constraints(const std_msgs::Float64MultiArrayConstPtr &msg);
+        void publish_report(const ros::TimerEvent &event);
+        void publish_visualization_fast(const ros::TimerEvent &event);
+        void publish_visualization_slow(const ros::TimerEvent &event);
+        void visualizeCurrentMission();
+        bool validTask(const orunav_msgs::Task &task);
+        bool validTarget(const orunav_msgs::RobotTarget &target);
+        bool validTaskMsg(const orunav_msgs::Task &task) const;
 
 };
 

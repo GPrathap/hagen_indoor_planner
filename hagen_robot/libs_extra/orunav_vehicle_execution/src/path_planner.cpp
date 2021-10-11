@@ -73,7 +73,7 @@ orunav_generic::Pose2d PathPlannerService::getNavMsgsOccupancyGridOffsetRef(cons
   return createPose2dFromMsg(msg.info.origin);
 }
 
-bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const geometry_msgs::PoseStamped goal, double start_steering, double goal_steering, std::vector<orunav_msgs::PoseSteering>& path_out){
+bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const geometry_msgs::PoseStamped goal, double start_steering, double goal_steering, orunav_generic::Path& path_out){
 
     ROS_INFO("[GetPathService] - start server : [%f,%f,%f](%f)", start.pose.position.x, start.pose.position.y,tf::getYaw(start.pose.orientation), start_steering);
     ROS_INFO("[GetPathService] - goal :  [%f,%f,%f](%f)", goal.pose.position.x, goal.pose.position.y,tf::getYaw(goal.pose.orientation), goal_steering);
@@ -163,7 +163,7 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
       orunav_generic::Path path_min_dist = orunav_generic::minIncrementalDistancePath(path, min_incr_path_dist_);
       // Second requirment (path states are not allowed to change direction of motion without any intermediate points).
       orunav_generic::Path path_dir_change = orunav_generic::minIntermediateDirPathPoints(path_min_dist);
-      createPathMsgFromPathInterface(path_dir_change, path_out);
+      // createPathMsgFromPathInterface(path_dir_change, path_out);
       // if (visualize_) {
       //   orunav_generic::Pose2d start_pose(start.pose.position.x, start.pose.position.y, tf::getYaw(start.pose.orientation));
       //   orunav_generic::Pose2d goal_pose(goal.pose.position.x, goal.pose.position.y, tf::getYaw(goal.pose.orientation));
@@ -179,6 +179,8 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
         
       //   orunav_generic::savePathTextFile(path, fn);
       // }
+      path_out = path_dir_change;
+      
       return true;
     }
    

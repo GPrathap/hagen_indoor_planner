@@ -273,7 +273,7 @@ class PathSmootherDynamic
   // void computeThBounds(const double &lb_orig, const double &ub_orig, const double &th, double &lb_new, double &ub_new);
   orunav_generic::Trajectory smooth_(const orunav_generic::Trajectory &traj, double dt, double start_time
                                                                                 , double stop_time, bool use_pose_constraints);
-  void smoothTraj(const std::vector<orunav_msgs::PoseSteering>& path_original
+  void smoothTraj(const orunav_generic::Path& path_original
                                 , orunav_generic::Path& smoothed_path
                                 , const geometry_msgs::PoseStamped& start, const geometry_msgs::PoseStamped& goal);
   

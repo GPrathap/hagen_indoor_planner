@@ -14,8 +14,8 @@
     <arg name="gui" value="true"/> 
   </include>
  
-  <arg name="x_pos" default="0"/>
-  <arg name="y_pos" default="0"/>
+  <arg name="x_pos" default="5.029"/>
+  <arg name="y_pos" default="13.538"/>
   <arg name="z_pos" default="0"/> 
 
   <arg name="front_laser" default="true" />
@@ -28,9 +28,9 @@
   <!-- <arg name="scan_topic" default="/lidar_wamv/points" /> -->
   
   <include file="$(find hagen_gazebo)/launch/spawn_hagen.launch">
-    <arg name="x" value="0" />
-    <arg name="y" value="0" />
-    <arg name="z" value="1.0" />
+    <arg name="x" value="5.029" />
+    <arg name="y" value="13.538" />
+    <arg name="z" value="0.0" />
     <arg name="yaw" value="0" />
     <arg name="config" value="$(arg config)" />
     <arg name="joystick" value="$(arg joystick)" />

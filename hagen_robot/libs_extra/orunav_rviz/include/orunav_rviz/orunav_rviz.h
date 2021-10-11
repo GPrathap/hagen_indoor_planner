@@ -186,30 +186,47 @@ void drawPose2d(const orunav_generic::Pose2dContainerInterface &poses, int idx, 
 
 void drawPose2dContainer(const orunav_generic::Pose2dContainerInterface &poses, const std::string &name, int id, ros::Publisher &pub)
 {
-   visualization_msgs::Marker m;
-   assignDefault(m);
-   assignColor(m, id);
+  visualization_msgs::Marker m;
+  assignDefault(m);
+  assignColor(m, id);
+  m.scale.x = 0.8; // The width of the strip
+  m.type = visualization_msgs::Marker::LINE_STRIP;
+  m.action = visualization_msgs::Marker::ADD;
+  m.ns = name + orunav_generic::toString(id);
+  m.id = id;
+  m.pose.orientation.w = 1.0;
+
+  geometry_msgs::Point p;
+  p.z = 0.0;
+  for (unsigned int i = 0; i <  poses.sizePose2d(); i++){
+      const orunav_generic::Pose2d &p_ = poses.getPose2d(i);
+      p.x = p_[0];
+      p.y = p_[1];
+      p.z = 0.0;
+      m.points.push_back(p);
+  }
+  pub.publish(m);
    
-   m.type = visualization_msgs::Marker::ARROW;
-   m.action = visualization_msgs::Marker::ADD;
-   m.ns = name;
-   m.pose.position.z = 0;
-   m.scale.x = 0.5;
-   m.scale.y = 0.02;
-   m.scale.z = 0.02;
+  //  m.type = visualization_msgs::Marker::ARROW;
+  //  m.action = visualization_msgs::Marker::ADD;
+  //  m.ns = name;
+  //  m.pose.position.z = 0;
+  //  m.scale.x = 0.5;
+  //  m.scale.y = 0.02;
+  //  m.scale.z = 0.02;
 
 
   
-  for (unsigned int i = 0; i < poses.sizePose2d(); i++)
-    {
-      m.id = i;
-      const orunav_generic::Pose2d &p = poses.getPose2d(i);
-      m.pose.position.x = p(0);
-      m.pose.position.y = p(1);
-      m.pose.orientation = tf::createQuaternionMsgFromYaw(p(2));
-      pub.publish(m);
-      usleep(10);
-    }
+  // for (unsigned int i = 0; i < poses.sizePose2d(); i++)
+  //   {
+  //     m.id = i;
+ 
+  //     m.pose.position.x = p(0);
+  //     m.pose.position.y = p(1);
+  //     m.pose.orientation = tf::createQuaternionMsgFromYaw(p(2));
+  //     pub.publish(m);
+  //     usleep(10);
+  //   }
 }
 
  void drawPosition(double x, double y, double z, int id, ros::Publisher &pub)

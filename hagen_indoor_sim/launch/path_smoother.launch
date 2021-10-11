@@ -44,5 +44,18 @@
       <param name="model_type" value="2" />
       <param name="visualize" value="false" />
     </node>
+
+    <node pkg="orunav_mpc" type="controller_node" name="controller"
+          output="screen">
+      <param name="robot_id" value="$(arg robot_id)" />
+      <remap from="/$(arg tf_prefix)/cmd_vel"
+             to="/$(arg tf_prefix)/controller/cmd_vel" />
+      <remap from="controller/commands"
+             to="control/controller/commands" />
+      <remap from="controller/reports"
+             to="control/controller/reports" />
+      <remap from="controller/trajectories"
+             to="control/controller/trajectories" />
+    </node>
   </group>
 </launch>

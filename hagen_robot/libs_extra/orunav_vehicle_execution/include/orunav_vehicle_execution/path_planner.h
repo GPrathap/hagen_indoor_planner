@@ -48,7 +48,8 @@ class PathPlannerService
     void init(ros::NodeHandle param_nh);
     void process_map(const nav_msgs::OccupancyGrid::ConstPtr &msg);
     ~PathPlannerService();
-    bool getPathCB(const geometry_msgs::PoseStamped start, const geometry_msgs::PoseStamped goal, double start_steering, double goal_steering, std::vector<orunav_msgs::PoseSteering>& path_out);
+    bool getPathCB(const geometry_msgs::PoseStamped start, const geometry_msgs::PoseStamped goal, double start_steering
+    , double goal_steering, orunav_generic::Path& path_out);
     void convertNavMsgsOccupancyGridToWorldOccupancyMapRef(const nav_msgs::OccupancyGrid& msg, WorldOccupancyMap &map);
     orunav_generic::Pose2d getNavMsgsOccupancyGridOffsetRef(const nav_msgs::OccupancyGrid &msg);
     orunav_generic::Pose2d createPose2dFromMsg(const geometry_msgs::Pose& pose);

@@ -179,12 +179,12 @@
     </inertial>
   </link>
 
-  <joint name="fork_joint" type="fixed">
+  <joint name="fork_joint" type="prismatic">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="chassis_link"/>
       <child link="fork_base_link"/>
       <axis xyz="0 0 1"/>
-      <limit effort="1000.0" lower="0" upper="1.0" velocity="0.05"/>
+      <limit effort="1000.0" lower="0" upper="0.25" velocity="0.05"/>
   </joint>
 
   <link name="fork_base_link">
@@ -216,11 +216,11 @@
     </inertial>
   </link>
 
-  <!-- <xacro:if value="$(arg use_ros_control_for_base)"> -->
-  <!-- <xacro:simple_transmission name="fork_joint" interface="PositionJointInterface"/> -->
-  <!-- </xacro:if> -->
 
-
+  <xacro:include filename="$(find hagen_description)/urdf/utils.urdf.xacro" />
+  <!-- <xacro:simple_transmission name="fork_joint" interface="VelocityJointInterface"/> -->
+  <xacro:simple_transmission name="fork_joint" interface="PositionJointInterface"/>
+  
   <xacro:unless value="$(optenv hagen_FRONT_ACCESSORY_FENDER 0)">
     <link name="front_fender_link">
       <visual>

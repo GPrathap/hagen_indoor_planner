@@ -38,3 +38,11 @@ hagen_velocity_controller:
       max_acceleration       : 25.0   # rad/s^2
 
 
+# hagen_fork_controller:
+#   type: "velocity_controllers/JointPositionController"
+#   joint: fork_joint
+#   pid: {p: 100.0, i: 0.01, d: 1.0}
+
+hagen_fork_controller:
+  type: "position_controllers/JointPositionController"
+  joint: fork_joint

@@ -200,7 +200,6 @@ namespace navfn {
       boost::mutex mutex_;
       ros::ServiceServer make_plan_srv_;
       std::string global_frame_;
-      // PathSmootherDynamic path_smoother;
   };
 };
 

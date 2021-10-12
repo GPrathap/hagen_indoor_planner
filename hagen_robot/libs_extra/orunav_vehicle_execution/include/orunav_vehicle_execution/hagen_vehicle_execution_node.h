@@ -66,14 +66,19 @@
 #include <orunav_vehicle_execution/trajectory_processor_naive.h>
 #include <orunav_vehicle_execution/path_smoother_dynamic.h>
 
-#include <orunav_node_utils/robot_target_handler.h>
-
+// #include <orunav_node_utils/robot_target_handler.h>
+#include <nav_msgs/Path.h>
 #include <sensor_msgs/LaserScan.h>
 #include <tf/transform_listener.h>
 #include <laser_geometry/laser_geometry.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <orunav_rviz/orunav_rviz.h>
 #include <move_base_msgs/MoveBaseActionGoal.h>
+
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 class KMOVehicleExecutionNode
 {
@@ -95,7 +100,7 @@ class KMOVehicleExecutionNode
     ros::Subscriber laserscan_sub_, goal_sub_;
     ros::Subscriber laserscan2_sub_;
 
-    ros::Subscriber control_report_sub_, odom_sub_;
+    ros::Subscriber control_report_sub_, odom_sub_, update_goal_sub_;
     ros::Subscriber fork_report_sub_;
     ros::Subscriber enc_sub_;
     ros::Subscriber map_sub_;
@@ -109,7 +114,7 @@ class KMOVehicleExecutionNode
     boost::condition_variable cond_;
 
     VehicleState vehicle_state_;
-    orunav_node_utils::RobotTargetHandler target_handler_;
+    // orunav_node_utils::RobotTargetHandler target_handler_;
     long current_id_;
 
     nav_msgs::OccupancyGrid current_map_;
@@ -214,11 +219,20 @@ class KMOVehicleExecutionNode
     double max_rotational_vel_rev_pallet_picking_;
 
     geometry_msgs::PoseStamped current_pose;
+    geometry_msgs::PoseStamped goal_pose;
     nav_msgs::Odometry odom;
 
     PathSmootherDynamic path_smoother;
     PathPlannerService path_planner;
-    
+    bool is_goal_set = false;
+    std::mutex lock_on_solver;
+    std::condition_variable condition_on_solver;
+    bool granted_execution = false;
+    std::thread solver_thread;
+    bool have_trajector_ = false;
+
+    nav_msgs::Path temp_path;
+
     public:
         KMOVehicleExecutionNode(ros::NodeHandle &paramHandle);
         KMOVehicleExecutionNode();
@@ -227,6 +241,7 @@ class KMOVehicleExecutionNode
         void updateTrajParamsWithVelocityConstraints(TrajectoryProcessor::Params &traj_params, const VehicleState &vehicle_state);
         void goalTrajectoryCallback(const geometry_msgs::PoseStampedConstPtr& msg1);
         void odomCallback(const nav_msgs::OdometryConstPtr& msg);
+        void processPlan(const nav_msgs::PathConstPtr& msg1);
         void publishInitPath(const std::vector<orunav_msgs::PoseSteering>& path, double r, double g, double b, double a);
         void publishSmoothPath(const orunav_generic::Path& path, double r, double g, double b, double a);
         void run();
@@ -236,12 +251,9 @@ class KMOVehicleExecutionNode
         void process_report(const orunav_msgs::ControllerReportConstPtr &msg);
         void process_velocity_constraints(const std_msgs::Float64MultiArrayConstPtr &msg);
         void publish_report(const ros::TimerEvent &event);
-        void publish_visualization_fast(const ros::TimerEvent &event);
-        void publish_visualization_slow(const ros::TimerEvent &event);
         void visualizeCurrentMission();
-        bool validTask(const orunav_msgs::Task &task);
-        bool validTarget(const orunav_msgs::RobotTarget &target);
-        bool validTaskMsg(const orunav_msgs::Task &task) const;
+        std::thread startPathPlannerThread();
+        void solverThread();
 
 };
 

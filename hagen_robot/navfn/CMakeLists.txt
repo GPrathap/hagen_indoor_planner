@@ -35,11 +35,6 @@ find_package(catkin REQUIRED
         orunav_msgs 
         )
 
-find_package(ACADO REQUIRED)
-if(NOT ACADO_FOUND)
-  message(FATAL_ERROR " ACADO *not* found")
-endif()
-
 # Added own variable containing the full path to the library.
 set(ACADO_LFLAGS -L${ACADO_LIBRARY_DIRS} -l${ACADO_SHARED_LIBRARIES})
 message("  - ACADO_LFLAGS : " ${ACADO_LFLAGS})
@@ -52,7 +47,6 @@ include_directories(
     include
     ${catkin_INCLUDE_DIRS}
     ${EIGEN3_INCLUDE_DIRS}
-    ${ACADO_INCLUDE_DIRS}
     ${PCL_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
 )
@@ -96,7 +90,7 @@ catkin_package(
         # orunav_rviz
         orunav_motion_planner
         orunav_msgs 
-      DEPENDS ACADO Boost
+      DEPENDS  Boost
 )
 
 # catkin_package(
@@ -136,8 +130,8 @@ endif (HAVE_SYS_TIME_H)
 include_directories(/usr/local/include/ompl-1.5/)
 link_directories(/usr/local/lib/)
 
-add_library (navfn src/navfn.cpp src/navfn_ros.cpp src/reeds_shepp_ros.cpp src/validity_checker.cpp)
-target_link_libraries(navfn ompl ${catkin_LIBRARIES}  ${ACADO_LFLAGS} ${PCL_LIBRARIES} ${OpenCV_LIBS})
+add_library (navfn src/navfn.cpp src/navfn_ros.cpp src/reeds_shepp_ros.cpp src/validity_checker.cpp )
+target_link_libraries(navfn ompl ${catkin_LIBRARIES}  ${PCL_LIBRARIES} ${OpenCV_LIBS})
 add_dependencies(navfn ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 

@@ -15,7 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
   orunav_rviz
   tf
   laser_geometry
-  orunav_node_utils
   orunav_motion_planner
 )
 
@@ -33,7 +32,7 @@ endif()
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs std_srvs orunav_node_utils orunav_rviz orunav_motion_planner nav_msgs orunav_msgs orunav_generic orunav_geometry tf laser_geometry
+  CATKIN_DEPENDS roscpp std_msgs std_srvs orunav_rviz orunav_motion_planner nav_msgs orunav_msgs orunav_generic orunav_geometry tf laser_geometry
   DEPENDS Boost
 )
 
@@ -46,11 +45,6 @@ endif()
 set(ACADO_LFLAGS -L${ACADO_LIBRARY_DIRS} -l${ACADO_SHARED_LIBRARIES})
 message("  - ACADO_LFLAGS : " ${ACADO_LFLAGS})
 
-
-###########
-## Build ##
-###########
-
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
@@ -59,72 +53,13 @@ include_directories(
   ${ACADO_INCLUDE_DIRS}
 )
 
-add_executable(orunav_vehicle_execution_node src/orunav_vehicle_execution_node.cpp src/path_planner.cpp src/path_smoother_dynamic.cpp)
-add_dependencies(orunav_vehicle_execution_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(orunav_vehicle_execution_node
+add_executable(hagen_vehicle_execution_node src/hagen_vehicle_execution_node.cpp src/path_planner.cpp src/path_smoother_dynamic.cpp)
+add_dependencies(hagen_vehicle_execution_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(hagen_vehicle_execution_node
    ${catkin_LIBRARIES}  ${ACADO_LFLAGS}
  )
 
-# add_executable(point_n_click_target_client src/point_n_click_target_client.cpp)
-# add_dependencies(point_n_click_target_client ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(point_n_click_target_client
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-
-# add_executable(send_brake_command src/send_brake_command_main.cpp)
-# add_dependencies(send_brake_command ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(send_brake_command
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-
-# add_executable(vehicle_execution_debug_client src/vehicle_execution_debug_client.cpp)
-# add_dependencies(vehicle_execution_debug_client ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(vehicle_execution_debug_client
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-
-# add_executable(vehicle_execution_client src/vehicle_execution_client.cpp)
-# add_dependencies(vehicle_execution_client ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(vehicle_execution_client
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-# add_executable(point_n_click_target_publisher src/point_n_click_target_publisher.cpp)
-# add_dependencies(point_n_click_target_publisher ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(point_n_click_target_publisher
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-
-# add_executable(send_abort_task src/send_abort_task_main.cpp)
-# add_dependencies(send_abort_task ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(send_abort_task
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-
-# add_executable(laser_filter src/laser_filter_main.cpp)
-# add_dependencies(laser_filter ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(laser_filter
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-
-# add_executable(generate_random_targets src/generate_random_targets_main.cpp)
-# add_dependencies(generate_random_targets ${catkin_EXPORTED_TARGETS})
-# target_link_libraries(generate_random_targets
-#    ${catkin_LIBRARIES}
-#    -lboost_program_options
-#  )
-
-#############
-## Install ##
-#############
-
-install(TARGETS orunav_vehicle_execution_node
+install(TARGETS hagen_vehicle_execution_node
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

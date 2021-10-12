@@ -51,7 +51,8 @@
     <param name="map_update_interval" value="2.0"/>
   </node>
 
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hagen_indoor_sim)/rviz/navigation.rviz" output="screen"/>
+  <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hagen_indoor_sim)/rviz/navigation.rviz" output="screen"/> -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find warehouse_simulation)/rviz/navigation.rviz" output="screen"/>
 
   <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server" >
       <param name="/target_frame_name" value="map" />

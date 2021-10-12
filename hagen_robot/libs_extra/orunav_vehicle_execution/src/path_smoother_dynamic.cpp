@@ -7,9 +7,9 @@ PathSmootherDynamic::PathSmootherDynamic(){
   // detector1.init();
 }
 
-void PathSmootherDynamic::init(ros::NodeHandle& node_){
-  ros::NodeHandle nh = ros::NodeHandle("~");
-  nh.param<bool>("visualize",visualize,false);
+void PathSmootherDynamic::init(ros::NodeHandle& nh){
+  
+  nh.param<bool>("visualize", visualize, true);
   nh.param<bool>("visualize_deep", params.visualize, false);
   nh.param<int>("nb_iter_steps", params.nb_iter_steps, 100);
   nh.param<bool>("minimize_phi_and_dist", params.minimize_phi_and_dist, true);
@@ -27,8 +27,7 @@ void PathSmootherDynamic::init(ros::NodeHandle& node_){
   nh.param<double>("w_min", params.w_min, -0.683589);
   nh.param<double>("w_max", params.w_max, 0.455311);
   nh.param<bool>("do_nothing", do_nothing, false);
-  // np.param<std::string>("global_frame", global_frame_, "map");
-  global_frame_ = "map";
+  nh.param<std::string>("global_map_frame", global_frame_, std::string("map"));
   // nh.param<bool>("reassign_constraints", reassign_constraints, false);
   // nh.param<int>("reassign_iters", reassign_iters, 1);
   // nh.param<double>("reassign_min_distance", reassign_min_distance_, -1.);
@@ -245,14 +244,7 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
             use_pose_constraints = false;
             // orunav_generic::Pose2dContainerInterface path_orig;
             orunav_generic::Path path_orig = path_original;
-            // for (int i = 0; i < path_original.size(); i++)
-            // {
-            //   orunav_generic::Pose2d p;
-            //   p[0] = path_original[i].pose.position.x;
-            //   p[1] = path_original[i].pose.position.y;
-            //   p[2] = tf::getYaw(path_original[i].pose.orientation);
-            //   path_orig.addPathPoint(p, path_original[i].steering);
-            // }
+            params.max_nb_opt_points = path_orig.sizePath(); 
             
             std::cout << "PATH SMOOTHER : path_orig ooooooooo.size() : " << path_original.sizePath() << std::endl;
             if (use_pose_constraints) {
@@ -272,12 +264,14 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
               T = orunav_generic::getTotalTime(gen);
             }
 
-            std::cout << "--------- Estimated total time T : " << T << " -----------" << std::endl;
+            std::cout << " Estimated total time T : " << params.max_nb_opt_points << " " << T << " ----------- " << std::endl;
             unsigned int orig_size = path_orig.sizePath();
             int skip_points = orig_size / params.max_nb_opt_points - 1;
             if (skip_points < 0)
               skip_points = 0;
+
             double dt = 0.06 * (1 + skip_points);
+            std::cout<< dt << " ---- " << skip_points << " ---- " << std::endl;
             orunav_generic::Path path;
             if (params.even_point_dist) {
               double min_dist = orunav_generic::getTotalDistance(path_orig) / params.max_nb_opt_points;
@@ -285,9 +279,12 @@ orunav_generic::Trajectory PathSmootherDynamic::smooth_(const orunav_generic::Tr
                 min_dist = params.min_dist;
               path = orunav_generic::minIncrDistancePath(path_orig, min_dist);
             }
+
             else {
               path = orunav_generic::subSamplePath(path_orig, skip_points);
             }
+
+            std::cout<< orig_size << " ---orig_size - " << path.sizePath() << " ---- " << std::endl;
             if (params.use_total_time) {
               dt = T / path.sizePath(); 
             }

@@ -69,7 +69,6 @@ namespace navfn {
       
       planner_ = boost::shared_ptr<NavFn>(new NavFn(costmap_->getSizeInCellsX(), costmap_->getSizeInCellsY()));
       
-
       // path_smoother.init();
 
       // private_nh.param("bspline/limit_vel", hagen_planner::NonUniformBspline::limit_vel_, 0.3);
@@ -473,6 +472,19 @@ namespace navfn {
     // fake_path.push_back(goal);
     // path_smoother.smoothTraj(fake_path, smoothed_path, start, goal);
     // publishPlan(plan, 0.3, 0.3, 0.8, 0.5);
+
+     
+
+    // geometry_msgs::PoseStamped goal_;
+    // goal_.pose.position.x = goal.pose.position.x;
+    // goal_.pose.position.y = goal.pose.position.y;
+    // goal_.pose.position.z = 0.0;
+    // // TODO 
+    // goal_.pose.orientation.x = goal.pose.orientation.x;
+    // goal_.pose.orientation.y = goal.pose.orientation.y;
+    // goal_.pose.orientation.z = goal.pose.orientation.z;
+    // goal_.pose.orientation.w = goal.pose.orientation.w;
+
     return !plan.empty();
   }
 

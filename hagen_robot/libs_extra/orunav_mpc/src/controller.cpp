@@ -196,7 +196,7 @@ swProcessStatus Controller::getCommand(
             break;
     }
 
-    SW_LOG_CONTROL("Computed car control: " << command);
+    // ROS_INFO_STREAM("Computed car control: " << command);
 
 
     if (thread_data->parameters.enable_closed_loop == false)

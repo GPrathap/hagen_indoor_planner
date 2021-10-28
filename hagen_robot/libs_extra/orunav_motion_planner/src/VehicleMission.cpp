@@ -1,11 +1,3 @@
-/**
- * @file VehicleMission.cpp
- * @author Marcello Cirillo
- *
- *  Created on: Mar 28, 2013
- *      Author: marcello
- */
-
 #include "orunav_motion_planner/VehicleMission.h"
 
 #include "orunav_motion_planner/UnicycleModel.h"
@@ -14,8 +6,6 @@
 #include "orunav_motion_planner/CarConfiguration.h"
 #include "orunav_motion_planner/UnicycleConfiguration.h"
 #include "orunav_motion_planner/LHDConfiguration.h"
-
-
 
 // init the static counter
 unsigned short int VehicleMission::vehicleNum_ = 0;
@@ -34,8 +24,10 @@ VehicleMission::VehicleMission(VehicleModel* m, double start_x, double start_y, 
 
 	// snap the start pose into the grid
 	if (fmod(start_x, WP::WORLD_SPACE_GRANULARITY) >= (WP::WORLD_SPACE_GRANULARITY / 2)) {
+		// std::cout<< "============================ceil====================" <<  WP::WORLD_SPACE_GRANULARITY << std::endl;
 		startXcell = ceil(start_x * (1/WP::WORLD_SPACE_GRANULARITY));
 	} else {
+		// std::cout<< "=============================floor===================" << WP::WORLD_SPACE_GRANULARITY << std::endl;
 		startXcell = floor(start_x * (1/WP::WORLD_SPACE_GRANULARITY));
 	}
 
@@ -72,6 +64,7 @@ VehicleMission::VehicleMission(VehicleModel* m, double start_x, double start_y, 
 	vehicleSimplePoint* p = new vehicleSimplePoint;
 	p->x = startXcell*WP::WORLD_SPACE_GRANULARITY;
 	p->y = startYcell*WP::WORLD_SPACE_GRANULARITY;
+	std::cout<< "================================================" << p->x << "," << startXcell << "," << p->y << "," << startYcell << std::endl;
 	p->orient = startOrient;
 	p->steering = startSteer;
 	traj.push_back(p);

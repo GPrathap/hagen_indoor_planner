@@ -48,7 +48,7 @@ public:
       // read parameters
       param_nh.param<std::string>("motion_primitives_directory", motion_prim_dir_, "./Primitives/");
       param_nh.param<std::string>("lookup_tables_directory", lookup_tables_dir_, "./LookupTables/");
-      param_nh.param<std::string>("maps_directory", maps_dir_, "./");
+      // param_nh.param<std::string>("maps_directory", maps_dir_, "./");
       std::string model;
       param_nh.param<std::string>("model", model, "");
       param_nh.param<double>("min_incr_path_dist", min_incr_path_dist_, 0.001);
@@ -56,7 +56,7 @@ public:
 
       WP::setPrimitivesDir(motion_prim_dir_);
       WP::setTablesDir(lookup_tables_dir_);
-      WP::setMapsDir(maps_dir_);
+      // WP::setMapsDir(maps_dir_);
       car_model_ = new CarModel(model);
 
       ROS_INFO_STREAM("[GetPathService] - Using model : " << model << "\n");

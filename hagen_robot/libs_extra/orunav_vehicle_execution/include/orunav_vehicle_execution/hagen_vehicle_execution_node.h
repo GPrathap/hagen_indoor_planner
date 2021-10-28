@@ -70,6 +70,8 @@
 #include <nav_msgs/Path.h>
 #include <sensor_msgs/LaserScan.h>
 #include <tf/transform_listener.h>
+#include <tf2_ros/transform_listener.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <laser_geometry/laser_geometry.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <orunav_rviz/orunav_rviz.h>
@@ -95,7 +97,7 @@ class KMOVehicleExecutionNode
     ros::Publisher forkcommand_pub_;
     ros::Publisher marker_pub_, marker_pub1_, marker_pub2_, marker_pub3_, marker_pub4_, marker_pub5_, marker_pub6_;
     ros::Publisher report_pub_;
-    ros::Publisher planningmap_pub_;
+    ros::Publisher planningmap_pub_, smooothed_pub_;
 
     ros::Subscriber laserscan_sub_, goal_sub_;
     ros::Subscriber laserscan2_sub_;
@@ -232,6 +234,9 @@ class KMOVehicleExecutionNode
     bool have_trajector_ = false;
 
     nav_msgs::Path temp_path;
+    geometry_msgs::TransformStamped transformStamped;
+    tf2_ros::Buffer tfBuffer;
+    tf::TransformListener listener;
 
     public:
         KMOVehicleExecutionNode(ros::NodeHandle &paramHandle);
@@ -254,6 +259,7 @@ class KMOVehicleExecutionNode
         void visualizeCurrentMission();
         std::thread startPathPlannerThread();
         void solverThread();
+        void publishGlobalPath(const orunav_generic::Path& path, double r, double g, double b, double a);
 
 };
 

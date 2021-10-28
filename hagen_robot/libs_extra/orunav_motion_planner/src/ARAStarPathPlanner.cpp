@@ -32,6 +32,11 @@ AStar(startNode) {
 		goalConfs.push_back((*it)->getMission()->getGoalConfiguration()->clone());
 	}
 	goalNode_ = new PathNode(goalConfs, w_, 0);
+	int startx__ = startNode->getConfigurations().front()->getMission()->getStartConfiguration()->getXCell();
+	int starty__ = startNode->getConfigurations().front()->getMission()->getStartConfiguration()->getYCell();
+
+	std::cout<< "====================ARAStarPathPlanner============================" << startx__ <<  "," << starty__ << "," << std::endl;
+
 }
 
 ARAStarPathPlanner::~ARAStarPathPlanner() {
@@ -50,54 +55,57 @@ ARAStarPathPlanner::~ARAStarPathPlanner() {
 std::vector<Node*> ARAStarPathPlanner::solve() {
 
 	std::vector<Node*> sol;
+	std::cout<< "===========================================================v1"<< std::endl;
 	WP::setHeuristicValueMultiplier(3);
 	sol = improvePath();
-
+    std::cout<< "===========================================================v2 " << sol.size() << std::endl;
 	if (sol.size() > 0) {
-		if (w_->isVisualizationEnabled()) {
-			w_->resetVisualization();
+		// if (w_->isVisualizationEnabled()) {
+			// w_->resetVisualization();
+			
 			for (std::vector<Node*>::iterator it = sol.begin(); it != sol.end(); it++) {
 				w_->visualizeConfigurations(dynamic_cast<PathNode*>(*it)->getConfigurations());
 			}
-		}
+		// }
 	}
 
-	boost::posix_time::time_duration timeElapsed(boost::posix_time::microsec_clock::local_time() - startingTime_);
+	// boost::posix_time::time_duration timeElapsed(boost::posix_time::microsec_clock::local_time() - startingTime_);
 
-	// while we can improve the solution and we still have time, continue
-	while (WP::HEURISTIC_VALUE_MULTIPLIER > 1 && (timeElapsed.total_seconds() < secondsToCalculatePath_)) {
+	// // while we can improve the solution and we still have time, continue
+	// while (WP::HEURISTIC_VALUE_MULTIPLIER > 1 && (timeElapsed.total_seconds() < secondsToCalculatePath_)) {
 
-		if (WP::LOG_LEVEL >= 2) {
-			char line[250];
-			sprintf(line, "Solution optimality bound: %2.2f", WP::HEURISTIC_VALUE_MULTIPLIER);
-			writeLogLine(line, "ARAStarPathPlanner", WP::LOG_FILE);
-		}
+	// 	if (WP::LOG_LEVEL >= 2) {
+	// 		char line[250];
+	// 		sprintf(line, "Solution optimality bound: %2.2f", WP::HEURISTIC_VALUE_MULTIPLIER);
+	// 		writeLogLine(line, "ARAStarPathPlanner", WP::LOG_FILE);
+	// 	}
 
-		double oldHeuristicValueMultiplier = WP::HEURISTIC_VALUE_MULTIPLIER;
-		WP::setHeuristicValueMultiplier(oldHeuristicValueMultiplier - 0.2);
-		this->prepareListsForNextIteration(oldHeuristicValueMultiplier, WP::HEURISTIC_VALUE_MULTIPLIER);
+	// 	double oldHeuristicValueMultiplier = WP::HEURISTIC_VALUE_MULTIPLIER;
+	// 	WP::setHeuristicValueMultiplier(oldHeuristicValueMultiplier - 0.2);
+	// 	this->prepareListsForNextIteration(oldHeuristicValueMultiplier, WP::HEURISTIC_VALUE_MULTIPLIER);
 
-		std::vector<Node*> newSol = improvePath();
+	// 	std::vector<Node*> newSol = improvePath();
 
-		if (newSol.size() > 0) {
-			for (std::vector<Node*>::iterator it = sol.begin(); it != sol.end(); it++ ){
-				delete *it;
-			}
-			sol.clear();
-			sol = newSol;
-			if (w_->isVisualizationEnabled()) {
-				w_->resetVisualization();
-				for (std::vector<Node*>::iterator it = sol.begin(); it != sol.end(); it++) {
-					w_->visualizeConfigurations(dynamic_cast<PathNode*>(*it)->getConfigurations());
-				}
-			}
+	// 	if (newSol.size() > 0) {
+	// 		for (std::vector<Node*>::iterator it = sol.begin(); it != sol.end(); it++ ){
+	// 			delete *it;
+	// 		}
+	// 		sol.clear();
+	// 		sol = newSol;
+	// 		if (true) {
+	// 			w_->resetVisualization();
+	// 			for (std::vector<Node*>::iterator it = sol.begin(); it != sol.end(); it++) {
+	// 				// std::cout<< "==============================>1"<< std::endl;
+	// 				w_->visualizeConfigurations(dynamic_cast<PathNode*>(*it)->getConfigurations());
+	// 			}
+	// 		}
 
-			if (WP::LOG_LEVEL >= 2 && WP::HEURISTIC_VALUE_MULTIPLIER <= 1.01) {
-				writeLogLine("Optimal solution found", "ARAStarPathPlanner", WP::LOG_FILE);
-			}
-		}
-		timeElapsed = boost::posix_time::microsec_clock::local_time() - startingTime_;
-	}
+	// 		if (WP::LOG_LEVEL >= 2 && WP::HEURISTIC_VALUE_MULTIPLIER <= 1.01) {
+	// 			writeLogLine("Optimal solution found", "ARAStarPathPlanner", WP::LOG_FILE);
+	// 		}
+	// 	}
+	// 	timeElapsed = boost::posix_time::microsec_clock::local_time() - startingTime_;
+	// }
 
 	return sol;
 }
@@ -142,9 +150,9 @@ std::vector<Node*> ARAStarPathPlanner::improvePath() {
 			}
 		}
 
-		if (WP::LOG_LEVEL >= 1) {
-			w_->visualizeConfigurations(candidate->getConfigurations());
-		}
+		// if (WP::LOG_LEVEL >= 1) {
+		// 	w_->visualizeConfigurations(candidate->getConfigurations());
+		// }
 
 		if (WP::LOG_LEVEL >= 5) {
 			candidate->print();

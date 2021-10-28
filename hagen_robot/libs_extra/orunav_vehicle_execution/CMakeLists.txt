@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   orunav_geometry
   orunav_rviz
   tf
+  tf2_ros
   laser_geometry
   orunav_motion_planner
 )
@@ -32,7 +33,7 @@ endif()
 
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs std_srvs orunav_rviz orunav_motion_planner nav_msgs orunav_msgs orunav_generic orunav_geometry tf laser_geometry
+  CATKIN_DEPENDS roscpp std_msgs tf2_ros std_srvs orunav_rviz orunav_motion_planner nav_msgs orunav_msgs orunav_generic orunav_geometry tf laser_geometry
   DEPENDS Boost
 )
 

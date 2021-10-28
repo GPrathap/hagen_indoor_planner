@@ -39,10 +39,10 @@
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="log">
     <remap from="scan" to="$(arg scan_topic)"/>
     <param name="maxRange" value="10"/>
-    <param name="xmin" value="-12"/>
-    <param name="ymin" value="-12"/>
-    <param name="xmax" value="12"/>
-    <param name="ymax" value="12"/>
+    <param name="xmin" value="-40"/>
+    <param name="ymin" value="-40"/>
+    <param name="xmax" value="40"/>
+    <param name="ymax" value="40"/>
     <param name="delta" value="0.05"/>
     <param name="particles" value="4"/>
     <param name="temporalUpdate" value="1.0"/>

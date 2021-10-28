@@ -65,6 +65,8 @@ void assignColor(visualization_msgs::Marker &m, int color)
  void drawPose2d(double x, double y, double th, int id, int color, double scale, const std::string &name, ros::Publisher &pub)
 {
    visualization_msgs::Marker m;
+   m.header.frame_id = "map";
+   m.header.stamp = ros::Time();
    assignDefault(m);
    assignColor(m, color);
    
@@ -87,6 +89,8 @@ void assignColor(visualization_msgs::Marker &m, int color)
 void drawSphere(double x, double y, double radius, int id, const std::string &name, ros::Publisher &pub)
 {
    visualization_msgs::Marker m;
+   m.header.frame_id = "map";
+   m.header.stamp = ros::Time();
    assignDefault(m);
    assignColor(m, 2);
 
@@ -187,6 +191,8 @@ void drawPose2d(const orunav_generic::Pose2dContainerInterface &poses, int idx, 
 void drawPose2dContainer(const orunav_generic::Pose2dContainerInterface &poses, const std::string &name, int id, ros::Publisher &pub)
 {
   visualization_msgs::Marker m;
+   m.header.frame_id = "map";
+   m.header.stamp = ros::Time();
   assignDefault(m);
   assignColor(m, id);
   m.scale.x = 0.8; // The width of the strip
@@ -198,10 +204,12 @@ void drawPose2dContainer(const orunav_generic::Pose2dContainerInterface &poses, 
 
   geometry_msgs::Point p;
   p.z = 0.0;
+  // std::cout<< "Final path: " << std::endl;
   for (unsigned int i = 0; i <  poses.sizePose2d(); i++){
       const orunav_generic::Pose2d &p_ = poses.getPose2d(i);
       p.x = p_[0];
       p.y = p_[1];
+      // std::cout<< p.x << " , " << p.y << std::endl;
       p.z = 0.0;
       m.points.push_back(p);
   }
@@ -232,6 +240,8 @@ void drawPose2dContainer(const orunav_generic::Pose2dContainerInterface &poses, 
  void drawPosition(double x, double y, double z, int id, ros::Publisher &pub)
  {
    visualization_msgs::Marker m;
+    m.header.frame_id = "map";
+   m.header.stamp = ros::Time();
    assignDefault(m);
    assignColor(m, id);
    
@@ -694,6 +704,8 @@ void drawDeltaTVec(const orunav_generic::Pose2dContainerInterface &poses, const 
  void drawTrajectoryLinePairs(const orunav_generic::TrajectoryInterface &traj1, const orunav_generic::TrajectoryInterface &traj2, int color, int id, const std::string &name, ros::Publisher &pub) {
    // Draw a line between the velocity points
    visualization_msgs::Marker m;
+   m.header.frame_id = "map";
+   m.header.stamp = ros::Time();
    assignDefault(m);
    assignColor(m, 1);
    m.color.a = 1;

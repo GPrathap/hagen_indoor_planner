@@ -21,12 +21,12 @@ World::World(WorldOccupancyMap* m, std::vector<VehicleMission*> missions) {
 			exit(0);
 		}
 	}
-	std::cout<< "=====map2" << std::endl;
 	xSize_ = m->getXSize();
 	ySize_ = m->getYSize();
 	xCells_ = (int) ((xSize_ / WP::WORLD_SPACE_GRANULARITY) + WP::CALCULATION_APPROXIMATION_ERROR);
 	yCells_ = (int) ((ySize_ / WP::WORLD_SPACE_GRANULARITY) + WP::CALCULATION_APPROXIMATION_ERROR);
-	std::cout<< "=====map3" << std::endl;
+	std::cout<< "=====map2" << xSize_ << " " << ySize_ << "  WP::WORLD_SPACE_GRANULARITY: " << WP::WORLD_SPACE_GRANULARITY << std::endl;
+	std::cout<< "=====map3" << xCells_ << " " << yCells_ << std::endl;
 	// initialize the collision detector
 	cd_ = new CollisionDetector(map_);
 	// by default the world is not visualized
@@ -34,9 +34,9 @@ World::World(WorldOccupancyMap* m, std::vector<VehicleMission*> missions) {
 	visualizer_ = 0;
 	std::cout<< "=====map4" << std::endl;
 	// now calculate the grid distances for each VehicleMission
-	if (map_->containsObstacles()) {
-		calculateGridDistancesFromGoals();
-	}
+	// if (map_->containsObstacles()) {
+	// 	calculateGridDistancesFromGoals();
+	// }
 	std::cout<< "=====map5" << std::endl;
 }
 
@@ -172,9 +172,10 @@ void World::resetVisualization() {
 }
 
 void World::visualizeConfigurations(std::vector<Configuration*> confs) {
-	if (visualization_) {
+	// if (visualization_) {
+		std::cout<< "==============================>2"<< std::endl;
 		visualizer_->drawConfigurations(confs);
-	}
+	// }
 }
 
 bool World::containsObstacles() {

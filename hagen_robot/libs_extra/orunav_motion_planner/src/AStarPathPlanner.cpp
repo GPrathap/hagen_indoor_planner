@@ -15,6 +15,7 @@ AStarPathPlanner::AStarPathPlanner(PathNode* startNode, World* world) : AStar(st
 
 	// insert the startNode into the uniqueNodes list
 	std::vector<Configuration*> newConfs = startNode->getConfigurations();
+
 	std::vector<Configuration*> clonedConfs;
 	clonedConfs.clear();
 	for (std::vector<Configuration*>::iterator it = newConfs.begin(); it != newConfs.end(); it ++) {
@@ -28,6 +29,7 @@ AStarPathPlanner::AStarPathPlanner(PathNode* startNode, World* world) : AStar(st
 	for (std::vector<Configuration*>::iterator it = startConfs.begin(); it != startConfs.end(); it ++ ) {
 		goalConfs.push_back((*it)->getMission()->getGoalConfiguration()->clone());
 	}
+	
 	goalNode_ = new PathNode(goalConfs, w_, 0);
 }
 
@@ -108,7 +110,7 @@ std::vector<Node*> AStarPathPlanner::solve() {
 	/** @todo ->>> remove!!!! */
 	//boost::posix_time::ptime startTime(boost::posix_time::microsec_clock::local_time());
 	//boost::posix_time::time_duration timeElapsed;
-
+    
 	while (solutionFound == false) {
 
 		// garbage collection
@@ -160,11 +162,11 @@ std::vector<Node*> AStarPathPlanner::solve() {
 			sol.clear();
 			return sol;
 		}
-
+	
 		// extract HT data from expanded nodes only when using a consistent heuristic (or the same admissible heuristic)
-		if (heuristicTableDataCollectionEnabled_ && !WP::USE_HEURISTIC_ESTIMATION) {
-			extractHTDataFromNode(candidate);
-		}
+		// if (heuristicTableDataCollectionEnabled_ && !WP::USE_HEURISTIC_ESTIMATION) {
+		// 	extractHTDataFromNode(candidate);
+		// }
 
 		if (WP::LOG_LEVEL >= 1) {
 			w_->visualizeConfigurations(candidate->getConfigurations());
@@ -176,9 +178,9 @@ std::vector<Node*> AStarPathPlanner::solve() {
 
 		// check if we have reached the goal
 		if (candidate->equalContent(goalNode_)) {
-			if (heuristicTableDataCollectionEnabled_) {
-				extractHTDataFromNode(candidate);
-			}
+			// if (heuristicTableDataCollectionEnabled_) {
+			// 	extractHTDataFromNode(candidate);
+			// }
 			solutionFound = true;
 			sol = this->clonePath(candidate);
 			if (WP::LOG_LEVEL >= 2) {

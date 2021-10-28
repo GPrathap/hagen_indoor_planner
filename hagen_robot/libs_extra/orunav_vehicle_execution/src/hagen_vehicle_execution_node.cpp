@@ -78,13 +78,11 @@ KMOVehicleExecutionNode::KMOVehicleExecutionNode(ros::NodeHandle &paramHandle){
     paramHandle.param<double>("max_linear_vel_rev_pallet_picking", max_linear_vel_rev_pallet_picking_, max_linear_vel_pallet_picking_);
     paramHandle.param<double>("max_rotational_vel_rev_pallet_picking", max_rotational_vel_rev_pallet_picking_, max_rotational_vel_pallet_picking_);
     
-   
     trajectorychunk_pub_ = nh_.advertise<orunav_msgs::ControllerTrajectoryChunkVec>("control/controller/trajectories", 1000);
     command_pub_ = nh_.advertise<orunav_msgs::ControllerCommand>("control/controller/commands", 1000);
     
     marker_pub_ = nh_.advertise<visualization_msgs::Marker>("visualization_marker", 10);
    
-
     goal_sub_ = nh_.subscribe<geometry_msgs::PoseStamped>("/move_base_simple/goal", 50, &KMOVehicleExecutionNode::goalTrajectoryCallback, this);
     odom_sub_ = nh_.subscribe<nav_msgs::Odometry>("/odometry/filtered", 50, &KMOVehicleExecutionNode::odomCallback, this);
     smooth_path_pub_ = nh_.advertise<nav_msgs::Path>("/move_base/hagen/smoothpath", 1);
@@ -92,7 +90,8 @@ KMOVehicleExecutionNode::KMOVehicleExecutionNode(ros::NodeHandle &paramHandle){
     control_report_sub_ = nh_.subscribe<orunav_msgs::ControllerReport>("control/controller/reports", 10, &KMOVehicleExecutionNode::process_report, this);
     velocity_constraints_sub_ = nh_.subscribe<std_msgs::Float64MultiArray>(orunav_generic::getRobotTopicName(robot_id_, "/velocity_constraints"), 1, &KMOVehicleExecutionNode::process_velocity_constraints, this);
     report_pub_ = nh_.advertise<orunav_msgs::RobotReport>("control/report", 1);
-    update_goal_sub_ = nh_.subscribe<nav_msgs::Path>("/move_base/NavfnROS/plan", 1, &KMOVehicleExecutionNode::processPlan, this);
+    smooothed_pub_ = nh_.advertise<nav_msgs::Path>("/move_base/NavfnROS/plan", 1);
+    update_goal_sub_ = nh_.subscribe<nav_msgs::Path>("/init_plan/plan", 1, &KMOVehicleExecutionNode::processPlan, this);
     heartbeat_report_pub_ = nh_.createTimer(ros::Duration(1.0), &KMOVehicleExecutionNode::publish_report, this);
    
     path_smoother.init(paramHandle);
@@ -198,6 +197,7 @@ void KMOVehicleExecutionNode::solverThread() {
       ROS_INFO_STREAM("[KMOVehicleExecutionNode] - size of path : " << path_out.sizePath());
 
       auto  start_pose2d = path_out.getPose2d(0);
+      std::cout<< "====================== path in: start: "<< start_pose2d.transpose() << std::endl;
       orunav_generic::Pose2d start_pose(start_pose2d[0], start_pose2d[1], start_pose2d[2]);
       auto  goal_pose2d = path_out.getPose2d(path_out.sizePath()-1);
       orunav_generic::Pose2d goal_pose_(goal_pose2d[0], goal_pose2d[1], goal_pose2d[2]);
@@ -206,9 +206,10 @@ void KMOVehicleExecutionNode::solverThread() {
       orunav_rviz::drawPose2dContainer(orunav_generic::minIncrementalDistancePath(path_out, 0.2), "path_subsampled", 1, marker_pub_);
 
       path_smoother.smoothTraj(path_out, path, current_pose, goal_pose);
-      orunav_rviz::drawPose2dContainer(orunav_generic::minIncrementalDistancePath(path, 0.2), "path_smoothed", 0, marker_pub_);      
+      orunav_rviz::drawPose2dContainer(orunav_generic::minIncrementalDistancePath(path, 0.2), "path_smoothed", 0, marker_pub_); 
+      publishGlobalPath(path, 0.3, 0.6, 0.9, 1);    
       ROS_INFO("[KMOVehicleExecutionNode] - get_path successful");
-      have_trajector_ =  true;
+      have_trajector_ = true;
     }
     std::cout<< "Solver is finished..." << std::endl;
     granted_execution = false;
@@ -291,7 +292,6 @@ void KMOVehicleExecutionNode::publishInitPath(const std::vector<orunav_msgs::Pos
     path_pub.publish(gui_path);
 }
 
-
 void KMOVehicleExecutionNode::publishSmoothPath(const orunav_generic::Path& path, double r, double g, double b, double a){
     nav_msgs::Path gui_path;
     gui_path.poses.resize(path.sizePath());
@@ -305,6 +305,21 @@ void KMOVehicleExecutionNode::publishSmoothPath(const orunav_generic::Path& path
       gui_path.poses[i] = stap;
     }
     smooth_path_pub_.publish(gui_path);
+}
+
+void KMOVehicleExecutionNode::publishGlobalPath(const orunav_generic::Path& path, double r, double g, double b, double a){
+    nav_msgs::Path gui_path;
+    gui_path.poses.resize(path.sizePath());
+    gui_path.header.frame_id = "map";
+    gui_path.header.stamp = ros::Time::now();
+     for(int i=0; i< path.sizePath(); i++){
+      geometry_msgs::PoseStamped stap;
+      stap.pose.position.x = path.getPose2d(i)[0];
+      stap.pose.position.y = path.getPose2d(i)[1];
+      stap.pose.position.z = 0.0;
+      gui_path.poses[i] = stap;
+    }
+    smooothed_pub_.publish(gui_path);
 }
 
 
@@ -321,13 +336,31 @@ void KMOVehicleExecutionNode::goalTrajectoryCallback(const geometry_msgs::PoseSt
 
 void KMOVehicleExecutionNode::odomCallback(const nav_msgs::OdometryConstPtr& msg){
     odom = *msg;
-    current_pose.pose.position.x = odom.pose.pose.position.x;
-    current_pose.pose.position.y = odom.pose.pose.position.y;
-    current_pose.pose.position.z = 0.0;
-    current_pose.pose.orientation.x = odom.pose.pose.orientation.x;
-    current_pose.pose.orientation.y = odom.pose.pose.orientation.y;
-    current_pose.pose.orientation.z = odom.pose.pose.orientation.z;
-    current_pose.pose.orientation.w = odom.pose.pose.orientation.w;
+    // current_pose.pose.position.x = odom.pose.pose.position.x;
+    // current_pose.pose.position.y = odom.pose.pose.position.y;
+    // current_pose.pose.position.z = 0.0;
+    // current_pose.pose.orientation.x = odom.pose.pose.orientation.x;
+    // current_pose.pose.orientation.y = odom.pose.pose.orientation.y;
+    // current_pose.pose.orientation.z = odom.pose.pose.orientation.z;
+    // current_pose.pose.orientation.w = odom.pose.pose.orientation.w;
+    // std::cout<< "---------" << current_pose.pose.position.x << "," << current_pose.pose.position.y << std::endl;
+    //  std::cout<< "=========================before=odom======================" << current_pose.pose.position.x  << "," << current_pose.pose.position.y << std::endl;
+    try{
+      
+      tf2_ros::TransformListener tfListener(tfBuffer);
+      transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time(0));
+      current_pose.pose.position.x = transformStamped.transform.translation.x;
+      current_pose.pose.position.y = transformStamped.transform.translation.y;
+      current_pose.pose.position.z = 0.0;
+      current_pose.pose.orientation.x = transformStamped.transform.rotation.x;
+      current_pose.pose.orientation.y = transformStamped.transform.rotation.y;
+      current_pose.pose.orientation.z = transformStamped.transform.rotation.z;
+      current_pose.pose.orientation.w = transformStamped.transform.rotation.w;
+      // std::cout<< "=========================before=odom======================" << current_pose.pose.position.x  << "," << current_pose.pose.position.y << std::endl;
+    }
+    catch (tf2::TransformException &ex) {
+      ROS_WARN("%s",ex.what());
+    }
   }
 
 void KMOVehicleExecutionNode::updateTrajParamsWithVelocityConstraints(TrajectoryProcessor::Params &traj_params, const VehicleState &vehicle_state)  {

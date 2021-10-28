@@ -159,6 +159,11 @@ std::vector<std::vector<Configuration*>> PathFinder::solve(bool visualization) {
 			sprintf(line, "Using ARA* planner [%d seconds]", timeBound_);
 			writeLogLine(std::string(line), "PathFinder", WP::LOG_FILE);
 		}
+		int startx__ = startNode->getConfigurations().front()->getMission()->getStartConfiguration()->getXCell();
+	    int starty__ = startNode->getConfigurations().front()->getMission()->getStartConfiguration()->getYCell();
+
+		std::cout<< "====================PathFinder============================" << startx__ <<  "," << starty__ << "," << std::endl;
+	
 		ARAStarPathPlanner* planner = new ARAStarPathPlanner(startNode, myWorld_, startTime, timeBound_);
 		solution = planner->solve();
 		delete planner;
@@ -196,6 +201,8 @@ std::vector<std::vector<Configuration*>> PathFinder::solve(bool visualization) {
 	PathNode* pn;
 	unsigned short int numberOfVehicles = missions_.size();
 	result.resize(numberOfVehicles);
+
+	std::cout<< "=====================numberOfVehicles" << numberOfVehicles << std::endl;
 	for (std::vector<Node*>::iterator it = solution.begin(); it != solution.end(); it++) {
 		pn = dynamic_cast<PathNode*>(*it);
 		for (unsigned short int i = 0; i < numberOfVehicles; i ++) {

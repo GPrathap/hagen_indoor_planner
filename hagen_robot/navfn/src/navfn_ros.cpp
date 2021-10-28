@@ -102,7 +102,7 @@ namespace navfn {
       //    std::cout<< "Cant initlaize distance map"<< std::endl;
       // }
       ros::NodeHandle private_nh("~/" + name);
-      plan_pub_ = private_nh.advertise<nav_msgs::Path>("plan", 1);
+      plan_pub_ = private_nh.advertise<nav_msgs::Path>("/init_plan/plan", 1);
       path_pub_ = private_nh.advertise<nav_msgs::Path>("reeds_shepp", 1);
 
       // field_obstacles_pub_ = private_nh.advertise<distance_map_msgs::DistanceMap>("distance_field_obstacles", 1, true);
@@ -140,18 +140,14 @@ namespace navfn {
   }
 
   bool NavfnROS::validPointPotential(const geometry_msgs::Point& world_point, double tolerance){
-
     if(!initialized_){
       ROS_ERROR("This planner has not been initialized yet, but it is being used, please call initialize() before use");
       return false;
     }
-
     double resolution = costmap_->getResolution();
     geometry_msgs::Point p;
     p = world_point;
-
     p.y = world_point.y - tolerance;
-
     while(p.y <= world_point.y + tolerance){
       p.x = world_point.x - tolerance;
       while(p.x <= world_point.x + tolerance){
@@ -163,7 +159,6 @@ namespace navfn {
       }
       p.y += resolution;
     }
-
     return false;
   }
 
@@ -479,11 +474,12 @@ namespace navfn {
     // goal_.pose.position.x = goal.pose.position.x;
     // goal_.pose.position.y = goal.pose.position.y;
     // goal_.pose.position.z = 0.0;
-    // // TODO 
     // goal_.pose.orientation.x = goal.pose.orientation.x;
     // goal_.pose.orientation.y = goal.pose.orientation.y;
     // goal_.pose.orientation.z = goal.pose.orientation.z;
     // goal_.pose.orientation.w = goal.pose.orientation.w;
+
+    // std::cout<< "--------" << goal.pose.position.x << "  " << goal.pose.position.y << " " << start.pose.position.x << "  " << start.pose.position.y << std::endl;
 
     return !plan.empty();
   }

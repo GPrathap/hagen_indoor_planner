@@ -66,6 +66,7 @@ inline Path minIncrementalDistancePathIdx(const PathInterface &path, double minD
   if (path.sizePath() == 0)
     return ret;
   ret.addPathPoint(path.getPose2d(0), path.getSteeringAngle(0));
+  std::cout<< "==========================minIncrementalDistancePathIdx: " << path.getPose2d(0).transpose() << std::endl;
   idx.push_back(0);
   Pose2d back = path.getPose2d(path.sizePath()-1);
   for (size_t i = 1; i < path.sizePath()-1; i++)

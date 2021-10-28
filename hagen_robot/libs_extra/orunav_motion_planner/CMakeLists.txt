@@ -26,6 +26,9 @@ else()
   set(EIGEN3_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR})
 endif()
 
+find_package(OpenCV REQUIRED )
+
+
 # FIND_PACKAGE( OpenCV REQUIRED )                              
 
 ## System dependencies are found with CMake's conventions
@@ -53,6 +56,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 
@@ -112,9 +116,11 @@ add_executable(get_path_service src/get_path_service.cpp
 add_dependencies(get_path_service ${catkin_EXPORTED_TARGETS})
 target_link_libraries(get_path_service
 #  orunav_motion_planner 
-${catkin_LIBRARIES} ${OpenCV_LIBS}
+${catkin_LIBRARIES} ${OpenCV_LIBS} 
 )
 
+
+message("--------------------------------------------------------------------------------------------------------------------------------------", ${OpenCV_INCLUDE_DIRS}, ${OpenCV_VERSION}, ${OpenCV_LIBS})
 add_executable(get_path_client src/get_path_client.cpp)
 add_dependencies(get_path_client ${catkin_EXPORTED_TARGETS})
 target_link_libraries(get_path_client

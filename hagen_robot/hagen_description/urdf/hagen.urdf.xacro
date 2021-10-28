@@ -179,6 +179,7 @@
     </inertial>
   </link>
 
+  <!-- prismatic -->
   <joint name="fork_joint" type="prismatic">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="chassis_link"/>

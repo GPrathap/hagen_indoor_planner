@@ -26,6 +26,4 @@
   <group if="$(optenv hagen_CONTROL_EXTRAS 0)" >
     <rosparam command="load" file="$(env hagen_CONTROL_EXTRAS_PATH)" />
   </group>
-
-
 </launch>

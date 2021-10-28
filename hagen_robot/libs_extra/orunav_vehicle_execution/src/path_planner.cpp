@@ -20,7 +20,7 @@
       map_sub = param_nh.subscribe<nav_msgs::OccupancyGrid>("/map",10, &PathPlannerService::process_map, this);
       
       ROS_INFO_STREAM("[GetPathService] - Using model : " << model << "\n");
-      param_nh.param<bool>("visualize",visualize_,false);
+      param_nh.param<bool>("visualize",visualize_, false);
   }
 
   void PathPlannerService::process_map(const nav_msgs::OccupancyGrid::ConstPtr &msg) {
@@ -89,14 +89,19 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
     }
 
     PathFinder* pf;
-    if (planner_map.getMap().empty())
+    if (planner_map.getMap().empty()){
       pf = new PathFinder(20, 20);
-    else
+    }
+    else{
+      std::cout<< "Getting from the real map -------------->" << std::endl;
       pf = new PathFinder(planner_map);
+    }
     
+    max_planning_time = 100.0;
     if (max_planning_time > 0.) 
       pf->setTimeBound(max_planning_time);
     
+    std::cout<< "=========================before=======================" << start.pose.position.x << "," << map_offset_x << "," << start.pose.position.y << "," << map_offset_y << std::endl;
     VehicleMission vm(car_model_, start.pose.position.x-map_offset_x, start.pose.position.y-map_offset_y, start_orientation, start_steering, goal.pose.position.x-map_offset_x
                                                                     , goal.pose.position.y-map_offset_y, goal_orientation, goal_steering);
     
@@ -117,12 +122,11 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
     ROS_INFO_STREAM("[GetPathService] - solution[0].size() : " << solution[0].size());
     
     orunav_generic::Path path;
-    
+
     for (std::vector<std::vector<Configuration*> >::iterator it = solution.begin(); it != solution.end(); it++)
     {
       for (std::vector<Configuration*>::iterator confit = (*it).begin(); confit != (*it).end(); confit++) {
         std::vector<vehicleSimplePoint> path_local = (*confit)->getTrajectory();
-        
         for (std::vector<vehicleSimplePoint>::iterator it2 = path_local.begin(); it2 != path_local.end(); it2++) {
           double orientation = it2->orient;  
           
@@ -130,7 +134,6 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
                                                                it2->y+map_offset_y,
                                                                orientation), it2->steering);
           path.addState2dInterface(state);
-          
         }
       }
     }
@@ -154,9 +157,9 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
 
     if (solution_found) {
       // First requirement (that the points are separated by a minimum distance).
-      orunav_generic::Path path_min_dist = orunav_generic::minIncrementalDistancePath(path, min_incr_path_dist_);
+      // orunav_generic::Path path_min_dist = orunav_generic::minIncrementalDistancePath(path, min_incr_path_dist_);
       // Second requirment (path states are not allowed to change direction of motion without any intermediate points).
-      orunav_generic::Path path_dir_change = orunav_generic::minIntermediateDirPathPoints(path_min_dist);
+      // orunav_generic::Path path_dir_change = orunav_generic::minIntermediateDirPathPoints(path_min_dist);
       // createPathMsgFromPathInterface(path_dir_change, path_out);
       // if (visualize_) {
       //   orunav_generic::Pose2d start_pose(start.pose.position.x, start.pose.position.y, tf::getYaw(start.pose.orientation));
@@ -173,7 +176,7 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
         
       //   orunav_generic::savePathTextFile(path, fn);
       // }
-      path_out = path_dir_change;
+      path_out = path;
       
       return true;
     }
@@ -182,9 +185,7 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
   }
 
   void PathPlannerService::createPathMsgFromPathInterface(const orunav_generic::PathInterface& path_in, std::vector<orunav_msgs::PoseSteering>& path_out){
-    
-    for (size_t i = 0; i < path_in.sizePath(); i++)
-      {
+    for (size_t i = 0; i < path_in.sizePath(); i++){
         orunav_msgs::PoseSteering ps;
         // geometry_msgs::PoseStamped ps;
         ps.pose.orientation = tf::createQuaternionMsgFromYaw(path_in.getPose2d(i)(2));
@@ -193,7 +194,7 @@ bool PathPlannerService::getPathCB(const geometry_msgs::PoseStamped start, const
         ps.pose.position.z = 0.;
         ps.steering = path_in.getSteeringAngle(i);
         path_out.push_back(ps);
-      }
+    }
   }
 
 
